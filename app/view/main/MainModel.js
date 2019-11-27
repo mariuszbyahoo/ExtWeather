@@ -6,6 +6,10 @@ Ext.define('ExtWeather.view.main.MainModel', {
 
     alias: 'viewmodel.main',
 
+    store: {
+        type: 'current'
+    },
+
     data: {
         query: '',
 
