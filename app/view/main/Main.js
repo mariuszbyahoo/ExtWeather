@@ -14,7 +14,7 @@ Ext.define('ExtWeather.view.main.Main', {
 
         'ExtWeather.view.main.MainController',
         'ExtWeather.view.main.MainModel',
-        'ExtWeather.view.subsites.CurrentWeather'
+        'ExtWeather.view.subsites.*'
     ],
     controller: 'main',
     viewModel: 'main',
@@ -83,7 +83,7 @@ Ext.define('ExtWeather.view.main.Main', {
             }
         ],
         listeners:{
-            beforeActivate: 'onTabItemSelected',
+            beforeActivate: 'onCurrentSelected',
         }
     }, {
         title: 'Weather Forecast',
@@ -95,7 +95,7 @@ Ext.define('ExtWeather.view.main.Main', {
             }
         ],
         listeners:{
-            beforeActivate: 'onTabItemSelected',
+            beforeActivate: 'onForecastSelected',
         }
     }]
 });

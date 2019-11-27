@@ -1,6 +1,4 @@
 
-let modelOutOfScope; // this variable is needed to obtain query value from the message promt to the outer functions (at the bottom)
-
 Ext.define('ExtWeather.view.main.MainController', {
     extend: 'Ext.app.ViewController',
 
@@ -8,10 +6,11 @@ Ext.define('ExtWeather.view.main.MainController', {
 
     viewModel: 'main',
 
-    onTabItemSelected: async function (sender) {
-        if(sender.config.title == 'Current Weather')
+    onCurrentSelected: async function (sender) {
             Ext.Msg.prompt('Weather', 'Type an english name of the city, which you are looking weather for:', 'onSubmitWeather', this);
-        else 
+    },
+
+    onForecastSelected: async function (sender) {
             Ext.Msg.prompt('Forecast', 'Type an english name of the city, which you are looking forecast for:', 'onSubmitForecast', this);
     },
 
@@ -19,32 +18,32 @@ Ext.define('ExtWeather.view.main.MainController', {
         if (choice === 'ok') {
             let vm = this.getViewModel();
             vm.set('query', input);
-            modelOutOfScope = vm;
-            let json = await getWeather();
+            let json = await getWeather(vm.data.query);
             vm.set('weather', json);
+            console.log(vm.get('weather'));
         }
     },
     onSubmitForecast: async function (choice, input) {
         if (choice === 'ok') {
             let vm = this.getViewModel();
             vm.set('query', input);
-            modelOutOfScope = vm;
-            let json = await getForecast();
+            let json = await getForecast(vm.data.query);
             vm.set('forecast', json);
+            console.log(vm.get('forecast'));
         }
     }
 });
 
-async function getWeather () {
+async function getWeather (query) {
     let response = await fetch('https://api.openweathermap.org/data/2.5/weather?q='
-        + modelOutOfScope.data.query 
+        + query 
         +'&appid=435b757eb1a5a697cbb51992ce5d7962');
     return await response.json();
 }
 
-async function getForecast () {
+async function getForecast (query) {
     let response = await fetch('https://api.openweathermap.org/data/2.5/forecast?q='
-        + modelOutOfScope.data.query 
+        + query 
         +'&appid=435b757eb1a5a697cbb51992ce5d7962');
     return await response.json();
 }
