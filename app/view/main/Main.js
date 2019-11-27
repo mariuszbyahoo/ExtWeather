@@ -15,38 +15,13 @@ Ext.define('ExtWeather.view.main.Main', {
 
         'ExtWeather.view.main.MainController',
         'ExtWeather.view.main.MainModel',
-        'ExtWeather.view.main.List'
     ],
 
     controller: 'main',
     viewModel: 'main',
 
-    ui: 'navigation',
-
-    tabBarHeaderPosition: 1,
     titleRotation: 0,
     tabRotation: 0,
-
-    header: {
-        layout: {
-            align: 'stretchmax'
-        },
-        title: {
-            bind: {
-                text: '{name}'
-            },
-            flex: 0
-        },
-        iconCls: 'fa-th-list'
-    },
-
-    tabBar: {
-        flex: 1,
-        layout: {
-            align: 'stretch',
-            overflowHandler: 'none'
-        }
-    },
 
     responsiveConfig: {
         tall: {
@@ -75,27 +50,22 @@ Ext.define('ExtWeather.view.main.Main', {
     },
 
     items: [{
-        title: 'Home',
-        iconCls: 'fa-home',
+        title: 'Home Page',
+        iconCls: 'fas fa-home',
         // The following grid shares a store with the classic version's grid as well!
-        items: [{
-            xtype: 'mainlist'
-        }]
-    }, {
-        title: 'Users',
-        iconCls: 'fa-user',
+        bind: {
+            html: '{loremIpsum}'
+        }
+    },{
+        title: 'Current Weather',
+        iconCls: 'fas fa-info-circle',
+        // The following grid shares a store with the classic version's grid as well!
         bind: {
             html: '{loremIpsum}'
         }
     }, {
-        title: 'Groups',
-        iconCls: 'fa-users',
-        bind: {
-            html: '{loremIpsum}'
-        }
-    }, {
-        title: 'Settings',
-        iconCls: 'fa-cog',
+        title: 'Weather Forecast',
+        iconCls: 'far fa-question-circle',
         bind: {
             html: '{loremIpsum}'
         }
