@@ -15,6 +15,7 @@ Ext.define('ExtWeather.view.main.Main', {
 
         'ExtWeather.view.main.MainController',
         'ExtWeather.view.main.MainModel',
+        'ExtWeather.view.subsites.CurrentWeather'
     ],
 
     controller: 'main',
@@ -22,6 +23,8 @@ Ext.define('ExtWeather.view.main.Main', {
 
     titleRotation: 0,
     tabRotation: 0,
+
+    ui: 'navigation',
 
     responsiveConfig: {
         tall: {
@@ -54,20 +57,25 @@ Ext.define('ExtWeather.view.main.Main', {
         iconCls: 'fas fa-home',
         // The following grid shares a store with the classic version's grid as well!
         bind: {
-            html: '{loremIpsum}'
+            html: '{homeText}<br />{openWeatherLogo}<br />'
         }
     },{
         title: 'Current Weather',
         iconCls: 'fas fa-info-circle',
-        // The following grid shares a store with the classic version's grid as well!
-        bind: {
-            html: '{loremIpsum}'
-        }
+        autoScroll: true,
+        items: [
+            {
+                xtype: 'current'
+            }
+        ]
     }, {
         title: 'Weather Forecast',
         iconCls: 'far fa-question-circle',
-        bind: {
-            html: '{loremIpsum}'
-        }
+        autoScroll: true,
+        items: [
+            {
+                xtype: 'forecast'
+            }
+        ]
     }]
 });
