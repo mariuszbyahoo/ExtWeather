@@ -8,7 +8,6 @@
 Ext.define('ExtWeather.view.main.Main', {
     extend: 'Ext.tab.Panel',
     xtype: 'app-main',
-
     requires: [
         'Ext.plugin.Viewport',
         'Ext.window.MessageBox',
@@ -17,21 +16,31 @@ Ext.define('ExtWeather.view.main.Main', {
         'ExtWeather.view.main.MainModel',
         'ExtWeather.view.subsites.CurrentWeather'
     ],
-
     controller: 'main',
     viewModel: 'main',
 
+    tabBarHeaderPosition: 1,
     titleRotation: 0,
     tabRotation: 0,
 
-    ui: 'navigation',
-
-    responsiveConfig: {
-        tall: {
-            headerPosition: 'top'
+    header: {
+        layout: {
+            align: 'stretchmax'
         },
-        wide: {
-            headerPosition: 'left'
+        title: {
+            bind: {
+                text: '{name}'
+            },
+            flex: 0
+        },
+        iconCls: 'fas fa-sun'
+    },
+
+    tabBar: {
+        flex: 1,
+        layout: {
+            align: 'stretch',
+            overflowHandler: 'none'
         }
     },
 
@@ -52,6 +61,11 @@ Ext.define('ExtWeather.view.main.Main', {
         }
     },
 
+    ui: 'navigation',
+    listeners: {
+        activeItemChange: 'onItemSelected'
+    },
+
     items: [{
         title: 'Home Page',
         iconCls: 'fas fa-home',
@@ -67,7 +81,10 @@ Ext.define('ExtWeather.view.main.Main', {
             {
                 xtype: 'current'
             }
-        ]
+        ],
+        listeners:{
+            beforeActivate: 'onTabItemSelected',
+        }
     }, {
         title: 'Weather Forecast',
         iconCls: 'far fa-question-circle',
@@ -76,6 +93,9 @@ Ext.define('ExtWeather.view.main.Main', {
             {
                 xtype: 'forecast'
             }
-        ]
+        ],
+        listeners:{
+            beforeActivate: 'onTabItemSelected',
+        }
     }]
 });

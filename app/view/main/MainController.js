@@ -7,13 +7,17 @@ Ext.define('ExtWeather.view.main.MainController', {
 
     alias: 'controller.main',
 
-    onItemSelected: function (sender, record) {
-        Ext.Msg.confirm('Confirm', 'Are you sure?', 'onConfirm', this);
+    viewModel: 'main',
+
+    onTabItemSelected: async function (sender, record) {
+        Ext.Msg.prompt('Select City', 'Type an english name of the city, which you are looking weather for:', 'onConfirm', this);
     },
 
-    onConfirm: function (choice) {
-        if (choice === 'yes') {
-            //
+    onConfirm: function (choice, input) {
+        if (choice === 'ok') {
+            var vm = this.getViewModel();
+            vm.set('query', input);
+            console.log(vm.get('query'));
         }
-    }
+    },
 });

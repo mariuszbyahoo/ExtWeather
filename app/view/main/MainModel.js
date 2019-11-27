@@ -7,6 +7,8 @@ Ext.define('ExtWeather.view.main.MainModel', {
     alias: 'viewmodel.main',
 
     data: {
+        query: '',
+
         name: 'ExtWeather',
 
         homeText: '<h2>Ext Weather App</h2> <br /> <p>App is gathering the data from an open source API called OpenWeather API.</p>',
