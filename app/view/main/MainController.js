@@ -13,7 +13,6 @@ Ext.define('ExtWeather.view.main.MainController', {
             Ext.Msg.prompt('Weather', 'Type an english name of the city, which you are looking weather for:', 'onSubmitWeather', this);
         else 
             Ext.Msg.prompt('Forecast', 'Type an english name of the city, which you are looking forecast for:', 'onSubmitForecast', this);
-        console.log(sender.config.title);
     },
 
     onSubmitWeather: async function (choice, input) {
@@ -21,9 +20,8 @@ Ext.define('ExtWeather.view.main.MainController', {
             let vm = this.getViewModel();
             vm.set('query', input);
             modelOutOfScope = vm;
-            console.log(modelOutOfScope.data.query);
             let json = await getWeather();
-            console.log(json);
+            vm.set('weather', json);
         }
     },
     onSubmitForecast: async function (choice, input) {
@@ -31,9 +29,8 @@ Ext.define('ExtWeather.view.main.MainController', {
             let vm = this.getViewModel();
             vm.set('query', input);
             modelOutOfScope = vm;
-            console.log(modelOutOfScope.data.query);
             let json = await getForecast();
-            console.log(json);
+            vm.set('forecast', json);
         }
     }
 });
