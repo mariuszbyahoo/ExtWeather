@@ -1,7 +1,6 @@
-/**
- * This class is the controller for the main view for the application. It is specified as
- * the "controller" of the Main view class.
- */
+
+let modelOutOfScope; // this variable is needed to obtain query value from the message promt to the outer functions (at the bottom)
+
 Ext.define('ExtWeather.view.main.MainController', {
     extend: 'Ext.app.ViewController',
 
@@ -9,15 +8,49 @@ Ext.define('ExtWeather.view.main.MainController', {
 
     viewModel: 'main',
 
-    onTabItemSelected: async function (sender, record) {
-        Ext.Msg.prompt('Select City', 'Type an english name of the city, which you are looking weather for:', 'onConfirm', this);
+    onTabItemSelected: async function (sender) {
+        if(sender.config.title == 'Current Weather')
+            Ext.Msg.prompt('Weather', 'Type an english name of the city, which you are looking weather for:', 'onSubmitWeather', this);
+        else 
+            Ext.Msg.prompt('Forecast', 'Type an english name of the city, which you are looking forecast for:', 'onSubmitForecast', this);
+        console.log(sender.config.title);
     },
 
-    onConfirm: function (choice, input) {
+    onSubmitWeather: async function (choice, input) {
         if (choice === 'ok') {
-            var vm = this.getViewModel();
+            let vm = this.getViewModel();
             vm.set('query', input);
-            console.log(vm.get('query'));
+            modelOutOfScope = vm;
+            console.log(modelOutOfScope.data.query);
+            let json = await getWeather();
+            console.log(json);
         }
     },
+    onSubmitForecast: async function (choice, input) {
+        if (choice === 'ok') {
+            let vm = this.getViewModel();
+            vm.set('query', input);
+            modelOutOfScope = vm;
+            console.log(modelOutOfScope.data.query);
+            let json = await getForecast();
+            console.log(json);
+        }
+    }
 });
+
+async function getWeather () {
+    let response = await fetch('https://api.openweathermap.org/data/2.5/weather?q='
+        + modelOutOfScope.data.query 
+        +'&appid=435b757eb1a5a697cbb51992ce5d7962');
+    return await response.json();
+}
+
+async function getForecast () {
+    let response = await fetch('https://api.openweathermap.org/data/2.5/forecast?q='
+        + modelOutOfScope.data.query 
+        +'&appid=435b757eb1a5a697cbb51992ce5d7962');
+    return await response.json();
+}
+
+
+
