@@ -19,5 +19,7 @@ Ext.application({
 
 Ext.onReady( function () {
     var store = Ext.create('ExtWeather.store.Current');
+    store.load();
     Ext.data.StoreManager.register(store);
+
 })
