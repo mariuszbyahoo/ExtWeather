@@ -16,3 +16,8 @@ Ext.application({
     // The name of the initial view to create.
     mainView: 'ExtWeather.view.main.Main'
 });
+
+Ext.onReady( function () {
+    var store = Ext.create('ExtWeather.store.Current');
+    Ext.data.StoreManager.register(store);
+})
