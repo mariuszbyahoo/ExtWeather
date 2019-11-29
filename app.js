@@ -18,8 +18,12 @@ Ext.application({
 });
 
 Ext.onReady( function () {
-    var store = Ext.create('ExtWeather.store.Current');
-    store.load();
-    Ext.data.StoreManager.register(store);
+    var current = Ext.create('ExtWeather.store.Current');
+    current.load();
+    Ext.data.StoreManager.register(current);
 
+    var forecast = Ext.create('ExtWeather.store.Forecast');
+    //forecast.getProxy().getReader().setGroupRootProperty('list[0].main');
+    forecast.load();
+    Ext.data.StoreManager.register(forecast);
 })

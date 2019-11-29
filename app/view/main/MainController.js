@@ -56,6 +56,7 @@ Ext.define('ExtWeather.view.main.MainController', {
     },
     onSubmitForecast: async function (choice, input) {
         if (choice === 'ok') {
+            let store = Ext.data.StoreManager.lookup('forecast');
             let vm = this.getViewModel();
             vm.set('query', input);
             let json = await getForecast(vm.data.query);
