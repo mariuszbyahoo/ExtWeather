@@ -2,15 +2,21 @@ Ext.define('ExtWeather.view.subsites.CurrentWeather',{
     extend: 'Ext.panel.Panel',
     xtype: 'current',
     layout: 'hbox',
+    viewModel: 'main',
+
+    // Jakoś musi nasłuchiwać tutaj eventu 'reload' i po tym 
+    // (jak się zamknie prompt i w VM będzie już pogoda) załadować 
+
     items: [
         {
             xtype: 'panel',
-            title: 'Main Weather Data',
+            title: 'Numbers',
             width: 600,
-            height: 200,
             margin: 20,
-            bind: {
-                html: '<div id="main">Tu będą dane</div>'
+            reference: 'numbers',
+            viewModel: 'main',
+            bind : {
+                html : '{weather}'
             }
         },
         {
@@ -20,7 +26,7 @@ Ext.define('ExtWeather.view.subsites.CurrentWeather',{
             height: 200,
             margin: 20,
             bind: {
-                html: '<div id="other">Tu będą dane</div>'
+                html : '{weather}'
             }
         }
     ]

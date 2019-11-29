@@ -15,9 +15,9 @@ Ext.define('ExtWeather.view.main.MainModel', {
 
         name: 'ExtWeather',
 
-        weather: undefined,
+        weather: 'none',
 
-        forecast: undefined,
+        forecast: 'none',
 
         homeText: '<h2>Ext Weather App</h2> <br /> <p>App is gathering the data from an open source API called OpenWeather API.</p>',
 
