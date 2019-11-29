@@ -19,9 +19,14 @@ Ext.define('ExtWeather.view.main.MainController', {
     onSubmitWeather: async function (choice, input) {
         if (choice === 'ok') {
             var store = Ext.data.StoreManager.lookup('current');
+            let vm = this.getViewModel();
+            vm.set('query', input);
+
+            store.getProxy().url = 'https://api.openweathermap.org/data/2.5/weather?q=' +
+             vm.get('query') + '&appid=435b757eb1a5a697cbb51992ce5d7962';
+             
             store.load();
-            // W tym momencie pobiera asynchronicznie dane które ma wyświetlić, ale z gdy renderuje 
-            // po wykonaniu operacji powinien zrenderować pole ponownie
+            store.sync();
         }
     },
     onSubmitForecast: async function (choice, input) {
