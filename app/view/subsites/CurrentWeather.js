@@ -12,11 +12,23 @@ Ext.define('ExtWeather.view.subsites.CurrentWeather',{
             xtype: 'panel',
             title: 'Numbers',
             width: 600,
+            height: 200,
             margin: 20,
             id: 'numbers', // Nadanie komuś takiego id nadaje go także w zrenderowanym DOM
-            viewModel: 'main',
-            bind : {
-                html : '{weather}'
+            items : {
+                xtype: 'grid',
+                columns: [
+                    {text: 'Temperature', dataIndex: 'temp'},
+                    {text: 'Pressure', dataIndex: 'pressure'},
+                    {text: 'Humidity', dataIndex: 'humidity'},
+                    {text: 'Temp. Max', dataIndex: 'temp_max'},
+                    {text: 'Temp. Min', dataIndex: 'temp_min'}
+                ],           
+                store: {type: 'current'}, 
+                flex: 1
+            },
+            listeners: {
+
             }
         },
         {

@@ -4,6 +4,6 @@ Ext.define('ExtWeather.model.Current', {
     alias: 'model.current',
 
     fields: [
-        'temp', 'pressure', 'humidity'
+        'temp', 'pressure', 'humidity', 'temp_max', 'temp_min'
     ]
 });

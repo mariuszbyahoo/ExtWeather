@@ -7,6 +7,8 @@ Ext.define('ExtWeather.store.Current' , {
 
     storeId: 'current',
 
+    id: 'current',
+
     reference: 'current',
 
     proxy: {
@@ -16,5 +18,7 @@ Ext.define('ExtWeather.store.Current' , {
             type: 'json',
             rootProperty: 'main',
         },
-    }
+    },
+    autoLoad: true,
+    autoSync: true
 });
