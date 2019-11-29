@@ -3,7 +3,7 @@ Ext.define('ExtWeather.store.Current' , {
 
     alias: 'store.current',
 
-    model: 'ExtWeather.model.Current',
+    model: 'ExtWeather.model.CurrentBasicData',
 
     storeId: 'current',
 
