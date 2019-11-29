@@ -4,9 +4,6 @@ Ext.define('ExtWeather.view.subsites.CurrentWeather',{
     layout: 'hbox',
     viewModel: 'main',
 
-    // Jakoś musi nasłuchiwać tutaj eventu 'reload' i po tym 
-    // (jak się zamknie prompt i w VM będzie już pogoda) załadować 
-
     buttons: [
         {
             text: 'Reload data',
@@ -32,7 +29,7 @@ Ext.define('ExtWeather.view.subsites.CurrentWeather',{
                         margin: 20,
                         viewModel: 'main',
                         tpl: new Ext.XTemplate(
-                            '<p>Temperature: {temp}</p>'
+                            '{temp}'
                         ),
                         itemSelector: 'p',
                         listeners: {
