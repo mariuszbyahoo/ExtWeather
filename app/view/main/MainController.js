@@ -8,12 +8,18 @@ Ext.define('ExtWeather.view.main.MainController', {
 
     store: Ext.data.StoreManager.lookup('current'),
 
+    reload: function() {console.log('you clicked me!')},
+
     onCurrentSelected: async function (sender) {
-            Ext.Msg.prompt('Weather', 'Type an english name of the city, which you are looking weather for:', 'onSubmitWeather', this);
+            Ext.Msg.prompt('Weather', 
+            'Type an english name of the city, which you are looking weather for:', 
+            'onSubmitWeather', this);
     },
 
     onForecastSelected: async function (sender) {
-            Ext.Msg.prompt('Forecast', 'Type an english name of the city, which you are looking forecast for:', 'onSubmitForecast', this);
+            Ext.Msg.prompt('Forecast', 
+            'Type an english name of the city, which you are looking forecast for:', 
+            'onSubmitForecast', this);
     },
 
     onSubmitWeather: async function (choice, input) {
@@ -25,12 +31,16 @@ Ext.define('ExtWeather.view.main.MainController', {
             store.getProxy().url = 'https://api.openweathermap.org/data/2.5/weather?q=' +
                 vm.get('query') + '&appid=435b757eb1a5a697cbb51992ce5d7962';
              
-            store.load();
-            store.sync();
-
-            var tempC = store.collect('temp')[0] - 273.15;
-            var record = "Temperature: " + tempC + " st. Celsjusza";
-            grid.update(record);
+            store.load({
+                scope: this,
+                callback: function() {
+                    var tempC = store.collect('temp')[0] - 273.15;
+                    var tempC = (Math.round(tempC * 100 ) / 100);
+                    var record = "Temperature: " + tempC + " st. Celsjusza";
+                    vm.set('temp', tempC);
+                    grid.update(record);
+                }
+            });            
         }
     },
     onSubmitForecast: async function (choice, input) {
