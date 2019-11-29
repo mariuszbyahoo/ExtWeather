@@ -34,11 +34,22 @@ Ext.define('ExtWeather.view.main.MainController', {
             store.load({
                 scope: this,
                 callback: function() {
+                    // Collecting data
                     var tempC = store.collect('temp')[0] - 273.15;
-                    var tempC = (Math.round(tempC * 100 ) / 100);
-                    var record = "Temperature: " + tempC + " st. Celsjusza";
-                    vm.set('temp', tempC);
-                    grid.update(record);
+                    var pressure = store.collect('pressure')[0];
+                    var humidity = store.collect('humidity')[0];
+                    var temp_min = store.collect('temp_min')[0];
+                    var temp_max = store.collect('temp_max')[0];
+
+                    // Rounding temperature
+                    var tempC = Math.round(tempC * 100 ) / 100;
+                    var amplitude = Math.round((temp_max - temp_min) * 100) / 100;
+
+                    // Populating the data in panel
+                    var data = "<div class='data'><p>Temperature: " + tempC + " Celsius </p><p>Pressure: " + pressure + " hPa </p>" +
+                        "<p>Humidity: " + humidity + "%</p><p>Temperature Amplitude will reach: " + amplitude + " Celsius</p></div>";
+
+                    grid.update(data);
                 }
             });            
         }

@@ -22,20 +22,14 @@ Ext.define('ExtWeather.view.subsites.CurrentWeather',{
                 margin: 20,
                 items: [
                     {
-                        xtype: 'dataview',
+                        xtype: 'panel',
                         id: 'currentContent',
-                        width: 450,
-                        height: 150,
+                        width: 400,
+                        height: 200,
                         margin: 20,
-                        viewModel: 'main',
-                        tpl: new Ext.XTemplate(
-                            '{temp}'
-                        ),
-                        itemSelector: 'p',
-                        listeners: {
-                            itemclick: 'reload'
+                        bind: {
+                            html : '{startInfo}'
                         }
-                        
                     }
                 ]
         },
