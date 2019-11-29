@@ -65,9 +65,6 @@ Ext.define('ExtWeather.view.main.MainController', {
         }
     }
 });
-    // let response = await fetch('https://api.openweathermap.org/data/2.5/forecast?q='
-    //     + query 
-    //     +'&appid=435b757eb1a5a697cbb51992ce5d7962');
 
 
 

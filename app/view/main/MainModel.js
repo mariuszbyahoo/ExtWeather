@@ -21,6 +21,4 @@ Ext.define('ExtWeather.view.main.MainModel', {
 
         openWeatherLogo: '<img src="./resources/openweather-transparent-logo-RGB.png"></img>',
     }
-
-    //TODO - add data, formulas and/or methods to support your view
 });
