@@ -20,13 +20,17 @@ Ext.define('ExtWeather.view.main.MainController', {
         if (choice === 'ok') {
             var store = Ext.data.StoreManager.lookup('current');
             let vm = this.getViewModel();
+            let grid = Ext.get('currentContent');
             vm.set('query', input);
-
             store.getProxy().url = 'https://api.openweathermap.org/data/2.5/weather?q=' +
-             vm.get('query') + '&appid=435b757eb1a5a697cbb51992ce5d7962';
+                vm.get('query') + '&appid=435b757eb1a5a697cbb51992ce5d7962';
              
             store.load();
             store.sync();
+
+            var tempC = store.collect('temp')[0] - 273.15;
+            var record = "Temperature: " + tempC + " st. Celsjusza";
+            grid.update(record);
         }
     },
     onSubmitForecast: async function (choice, input) {

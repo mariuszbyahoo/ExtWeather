@@ -7,29 +7,31 @@ Ext.define('ExtWeather.view.subsites.CurrentWeather',{
     // Jakoś musi nasłuchiwać tutaj eventu 'reload' i po tym 
     // (jak się zamknie prompt i w VM będzie już pogoda) załadować 
 
+    buttons: [
+        {
+            text: 'Reload data',
+            handler: 'onCurrentSelected'
+        }
+    ],
+
     items: [
         {
-            xtype: 'panel',
-            title: 'Numbers',
-            width: 600,
-            height: 200,
-            margin: 20,
-            id: 'numbers', // Nadanie komuś takiego id nadaje go także w zrenderowanym DOM
-            items : {
-                xtype: 'grid',
-                columns: [
-                    {text: 'Temperature', dataIndex: 'temp'},
-                    {text: 'Pressure', dataIndex: 'pressure'},
-                    {text: 'Humidity', dataIndex: 'humidity'},
-                    {text: 'Temp. Max', dataIndex: 'temp_max'},
-                    {text: 'Temp. Min', dataIndex: 'temp_min'}
-                ],           
-                store: {type: 'current'}, 
-                flex: 1
-            },
-            listeners: {
-
-            }
+                xtype: 'panel',
+                title: 'Basic weather info',
+                id: 'currentGrid',
+                viewModel: 'main',
+                width: 600,
+                height: 200,
+                margin: 20,
+                items: [
+                    {
+                        xtype: 'panel',
+                        id: 'currentContent',
+                        width: 450,
+                        height: 150,
+                        margin: 20,
+                    }
+                ]
         },
         {
             xtype: 'panel',

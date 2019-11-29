@@ -62,9 +62,6 @@ Ext.define('ExtWeather.view.main.Main', {
     },
 
     ui: 'navigation',
-    listeners: {
-        activeItemChange: 'onItemSelected'
-    },
 
     items: [{
         title: 'Home Page',
@@ -83,7 +80,7 @@ Ext.define('ExtWeather.view.main.Main', {
             }
         ],
         listeners:{
-            beforeActivate: 'onCurrentSelected',
+            activate: 'onCurrentSelected',
         }
     }, {
         title: 'Weather Forecast',
@@ -95,7 +92,7 @@ Ext.define('ExtWeather.view.main.Main', {
             }
         ],
         listeners:{
-            beforeActivate: 'onForecastSelected',
+            activate: 'onForecastSelected',
         }
     }]
 });

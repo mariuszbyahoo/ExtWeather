@@ -15,6 +15,8 @@ Ext.define('ExtWeather.view.main.MainModel', {
 
         name: 'ExtWeather',
 
+        temp: 'Press "Load data"',
+
         homeText: '<h2>Ext Weather App</h2> <br /> <p>App is gathering the data from an open source API called OpenWeather API.</p>',
 
         openWeatherLogo: '<img src="./resources/openweather-transparent-logo-RGB.png"></img>',
