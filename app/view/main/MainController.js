@@ -64,20 +64,9 @@ Ext.define('ExtWeather.view.main.MainController', {
         }
     }
 });
-
-async function getWeather (query) {
-    let response = await fetch('https://api.openweathermap.org/data/2.5/weather?q='
-        + query 
-        +'&appid=435b757eb1a5a697cbb51992ce5d7962');
-    return await response.json();
-}
-
-async function getForecast (query) {
-    let response = await fetch('https://api.openweathermap.org/data/2.5/forecast?q='
-        + query 
-        +'&appid=435b757eb1a5a697cbb51992ce5d7962');
-    return await response.json();
-}
+    // let response = await fetch('https://api.openweathermap.org/data/2.5/forecast?q='
+    //     + query 
+    //     +'&appid=435b757eb1a5a697cbb51992ce5d7962');
 
 
 
