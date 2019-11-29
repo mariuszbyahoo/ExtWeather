@@ -19,14 +19,13 @@ Ext.define('ExtWeather.view.main.MainController', {
     onSubmitWeather: async function (choice, input) {
         if (choice === 'ok') {
             let vm = this.getViewModel();
-            //let numbers = this.get('current');
+            let numbers = Ext.ComponentQuery.query('panel[id=numbers]')
             console.log('vm.get("weather"): ', vm.get('weather'));
             vm.set('query', input);
             let json = await getWeather(vm.data.query);
             vm.set('weather', json);
             console.log('vm.get("weather"): ', vm.get('weather'));
-            console.log('Ext.ComponentQuery.query("panel[title=Numbers]"): ', Ext.ComponentQuery.query('panel[reference=numbers]'));
-            console.log('this.getView().items.keys[1]: ' , this.getView().items.keys[1]); // Child panel 'Numbers'
+            console.log('Ext.ComponentQuery.query("panel[id=numbers]"): ', numbers);
 
             // W tym momencie pobiera asynchronicznie dane które ma wyświetlić, ale z gdy renderuje 
             // po wykonaniu operacji powinien zrenderować pole ponownie

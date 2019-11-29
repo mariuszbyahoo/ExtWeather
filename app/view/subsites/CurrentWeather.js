@@ -13,7 +13,7 @@ Ext.define('ExtWeather.view.subsites.CurrentWeather',{
             title: 'Numbers',
             width: 600,
             margin: 20,
-            reference: 'numbers',
+            id: 'numbers', // Nadanie komuś takiego id nadaje go także w zrenderowanym DOM
             viewModel: 'main',
             bind : {
                 html : '{weather}'
