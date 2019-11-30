@@ -94,6 +94,7 @@ async function populateOthersWeatherGrid(input, vm) {
             console.log(store.collect('speed'), 'km/h', deg);
             windGrid.update(data);
             await populateCloudsDiv(input, vm); 
+            await populateTitle(input, vm);
         }
     });   
 }
@@ -131,6 +132,20 @@ async function populateVisibilityDiv(input, vm) {
             let data = "<div class='data'><p>Visibility: "+ visibility +" meters</p></div>";
             visibilityGrid.update(data)
             console.log(visibility);
+        }
+    });
+}
+
+async function populateTitle(input, vm){
+    let store = Ext.data.StoreManager.lookup('rootInfo');
+    vm.set('query', input);
+    store.getProxy().url = 'https://api.openweathermap.org/data/2.5/weather?q=' +
+        vm.get('query') + '&appid=435b757eb1a5a697cbb51992ce5d7962';
+    await store.load({
+        scope: this,
+        callback: function () {
+        let title = store.collect('name')[0];
+        Ext.ComponentManager.get('currentRootPanel').setTitle('Weather in ' + title); 
         }
     });
 }

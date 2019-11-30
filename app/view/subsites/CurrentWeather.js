@@ -3,6 +3,7 @@ Ext.define('ExtWeather.view.subsites.CurrentWeather',{
     xtype: 'current',
     layout: 'hbox',
     viewModel: 'main',
+    id: 'currentRootPanel',
 
     buttons: [
         {
@@ -39,7 +40,7 @@ Ext.define('ExtWeather.view.subsites.CurrentWeather',{
             id: 'othersGrid',
             viewModel: 'main',
             width: 600,
-            height: 500,
+            height: 250,
             margin: 20,
             items: [
                 {
@@ -66,7 +67,7 @@ Ext.define('ExtWeather.view.subsites.CurrentWeather',{
                     xtype: 'panel',
                     id: 'visibilityContent',
                     width: 400,
-                    height: 150,
+                    height: 30,
                     margin: 10
                 }
             ]
