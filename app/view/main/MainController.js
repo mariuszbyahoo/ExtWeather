@@ -24,9 +24,10 @@ Ext.define('ExtWeather.view.main.MainController', {
 
     onSubmitWeather: async function (choice, input) {
         if (choice === 'ok') {
-            var store = Ext.data.StoreManager.lookup('current');
+            let store = Ext.data.StoreManager.lookup('current');
             let vm = this.getViewModel();
-            let grid = Ext.get('currentContent');
+            let currentGrid = Ext.get('currentContent');
+            let windGrid = Ext.get('forecastContent');
             vm.set('query', input);
             store.getProxy().url = 'https://api.openweathermap.org/data/2.5/weather?q=' +
                 vm.get('query') + '&appid=435b757eb1a5a697cbb51992ce5d7962';
@@ -34,6 +35,8 @@ Ext.define('ExtWeather.view.main.MainController', {
             store.load({
                 scope: this,
                 callback: function() {
+                // POPULATING FIRST GRID
+
                     // Collecting data
                     var tempC = store.collect('temp')[0] - 273.15;
                     var pressure = store.collect('pressure')[0];
@@ -49,7 +52,12 @@ Ext.define('ExtWeather.view.main.MainController', {
                     var data = "<div class='data'><p>Temperature: " + tempC + " Celsius </p><p>Pressure: " + pressure + " hPa </p>" +
                         "<p>Humidity: " + humidity + "%</p><p>Temperature Amplitude will reach: " + amplitude + " Celsius</p></div>";
 
-                    grid.update(data);
+                    currentGrid.update(data);
+
+                // POPULATING SECOND GRID
+                    // Change the store proxy's root property
+                    // Tu potrzeba kilka różnych klas bo te gettery settery coś z nimi nie tego
+                    // Get the Wind's data
                 }
             });            
         }
@@ -59,9 +67,6 @@ Ext.define('ExtWeather.view.main.MainController', {
             let store = Ext.data.StoreManager.lookup('forecast');
             let vm = this.getViewModel();
             vm.set('query', input);
-            let json = await getForecast(vm.data.query);
-            vm.set('forecast', json);
-            console.log(vm.get('forecast'));
         }
     }
 });

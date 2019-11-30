@@ -1,15 +1,9 @@
 Ext.define('ExtWeather.store.Current' , {
     extend: 'Ext.data.Store', 
 
-    alias: 'store.current',
-
     model: 'ExtWeather.model.CurrentBasicData',
 
     storeId: 'current',
-
-    id: 'current',
-
-    reference: 'current',
 
     proxy: {
         type: 'jsonp',
