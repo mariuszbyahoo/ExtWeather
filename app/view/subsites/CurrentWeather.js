@@ -6,7 +6,7 @@ Ext.define('ExtWeather.view.subsites.CurrentWeather',{
 
     buttons: [
         {
-            text: 'Reload data',
+            text: 'Load',
             handler: 'onCurrentSelected'
         }
     ],
@@ -44,13 +44,20 @@ Ext.define('ExtWeather.view.subsites.CurrentWeather',{
             items: [
                 {
                     xtype: 'panel',
-                    id: 'othersContent',
+                    id: 'windContent',
                     width: 400,
                     height: 200,
                     margin: 20,
                     bind: {
                         html : '{startInfo}'
                     }
+                },
+                {
+                    xtype: 'panel',
+                    id: 'cloudsContent',
+                    width: 400,
+                    height: 200,
+                    margin: 10
                 }
             ]
         }

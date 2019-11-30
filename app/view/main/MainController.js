@@ -82,7 +82,7 @@ async function populateOthersWeatherGrid(input, vm) {
     vm.set('query', input);
     store.getProxy().url = 'https://api.openweathermap.org/data/2.5/weather?q=' +
         vm.get('query') + '&appid=435b757eb1a5a697cbb51992ce5d7962';
-    let windGrid = Ext.get('othersContent');
+    let windGrid = Ext.get('windContent');
 
     await store.load({
         scope: this,
