@@ -88,8 +88,7 @@ async function populateOthersWeatherGrid(input, vm) {
         scope: this,
         callback : function() {
             let data = "<div class='data'><p>Wind Speed: " + store.collect('speed') 
-            + " km/h </p><p>Wind blows in degree : " + store.collect('deg') + "* </p>"+
-                "Short weather's desc: " /*+ getCloudsDesc(input, vm)*/  + "</p></div>";
+            + " km/h </p><p>Wind blows in degree : " + store.collect('deg') + "*</div>";
             
             console.log(store.collect('speed'), 'km/h', store.collect('deg'), '*');
         
@@ -107,14 +106,14 @@ async function populateOthersWeatherGrid(input, vm) {
         // Change the store proxy's root property    
 }
 
-function getCloudsDesc(input, vm){
+async function getCloudsDesc(input, vm){
     console.log('Gathering weather desc data')
     let store = Ext.data.StoreManager.lookup('clouds');
         
     vm.set('query', input);
     store.getProxy().url = 'https://api.openweathermap.org/data/2.5/weather?q=' +
         vm.get('query') + '&appid=435b757eb1a5a697cbb51992ce5d7962';
-    store.load();
+    await store.load();
 
     let clouds = store.collect('description')[0];
     console.log(clouds);
