@@ -106,7 +106,6 @@ async function populateOthersWeatherGrid(input, vm) {
 }
 
 async function populateCloudsGrid(input, vm){
-    console.log('Gathering weather desc data')
     let store = Ext.data.StoreManager.lookup('clouds');
     let cloudsGrid = Ext.get('cloudsContent');
 
@@ -117,6 +116,24 @@ async function populateCloudsGrid(input, vm){
         scope: this,
         callback: function () {
             let clouds = store.collect('description')[0];
+            let data = "<div class='data'><p>Overall description: "+ clouds +"</p></div>";
+            cloudsGrid.update(data)
+            console.log(clouds);
+        }
+    });
+}
+
+async function populateVisibilityGrid(input, vm) {
+    let store = Ext.data.StoreManager.lookup('visibility');
+    let visibilityGrid = Ext.get('visibilityContent');
+
+    vm.set('query', input);
+    store.getProxy().url = 'https://api.openweathermap.org/data/2.5/weather?q=' +
+        vm.get('query') + '&appid=435b757eb1a5a697cbb51992ce5d7962';
+    await store.load({
+        scope: this,
+        callback: function () {
+            let clouds = store.collect('visibility')[0];
             let data = "<div class='data'><p>Overall description: "+ clouds +"</p></div>";
             cloudsGrid.update(data)
             console.log(clouds);
