@@ -4,6 +4,6 @@ Ext.define('ExtWeather.model.CurrentCloudsData', {
     alias: 'model.currentCloudsData',
 
     fields: [
-        'all'
+        'id', 'main', 'icon', 'description'
     ]
 });

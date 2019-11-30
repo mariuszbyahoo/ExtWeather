@@ -36,7 +36,7 @@ Ext.define('ExtWeather.view.subsites.CurrentWeather',{
         {
             xtype: 'panel',
             title: 'Visibility, clouds, and wind',
-            id: 'forecastGrid',
+            id: 'othersGrid',
             viewModel: 'main',
             width: 600,
             height: 200,
@@ -44,7 +44,7 @@ Ext.define('ExtWeather.view.subsites.CurrentWeather',{
             items: [
                 {
                     xtype: 'panel',
-                    id: 'forecastContent',
+                    id: 'othersContent',
                     width: 400,
                     height: 200,
                     margin: 20,

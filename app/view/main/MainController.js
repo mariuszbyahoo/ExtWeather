@@ -24,42 +24,8 @@ Ext.define('ExtWeather.view.main.MainController', {
 
     onSubmitWeather: async function (choice, input) {
         if (choice === 'ok') {
-            let store = Ext.data.StoreManager.lookup('current');
-            let vm = this.getViewModel();
-            let currentGrid = Ext.get('currentContent');
-            let windGrid = Ext.get('forecastContent');
-            vm.set('query', input);
-            store.getProxy().url = 'https://api.openweathermap.org/data/2.5/weather?q=' +
-                vm.get('query') + '&appid=435b757eb1a5a697cbb51992ce5d7962';
-             
-            store.load({
-                scope: this,
-                callback: function() {
-                // POPULATING FIRST GRID
-
-                    // Collecting data
-                    var tempC = store.collect('temp')[0] - 273.15;
-                    var pressure = store.collect('pressure')[0];
-                    var humidity = store.collect('humidity')[0];
-                    var temp_min = store.collect('temp_min')[0];
-                    var temp_max = store.collect('temp_max')[0];
-
-                    // Rounding temperature
-                    var tempC = Math.round(tempC * 100 ) / 100;
-                    var amplitude = Math.round((temp_max - temp_min) * 100) / 100;
-
-                    // Populating the data in panel
-                    var data = "<div class='data'><p>Temperature: " + tempC + " Celsius </p><p>Pressure: " + pressure + " hPa </p>" +
-                        "<p>Humidity: " + humidity + "%</p><p>Temperature Amplitude will reach: " + amplitude + " Celsius</p></div>";
-
-                    currentGrid.update(data);
-
-                // POPULATING SECOND GRID
-                    // Change the store proxy's root property
-                    // Tu potrzeba kilka różnych klas bo te gettery settery coś z nimi nie tego
-                    // Get the Wind's data
-                }
-            });            
+            await populateBasicWeatherGrid(input, this.getViewModel());
+            await populateOthersWeatherGrid(input, this.getViewModel());
         }
     },
     onSubmitForecast: async function (choice, input) {
@@ -71,5 +37,88 @@ Ext.define('ExtWeather.view.main.MainController', {
     }
 });
 
+async function populateBasicWeatherGrid(input, vm) {
+    let store = Ext.data.StoreManager.lookup('current');
+    store.getProxy().getReader().setRootProperty('main');
+    let currentGrid = Ext.get('currentContent');
+    vm.set('query', input);
+    store.getProxy().url = 'https://api.openweathermap.org/data/2.5/weather?q=' +
+        vm.get('query') + '&appid=435b757eb1a5a697cbb51992ce5d7962';
+     
+    await store.load({
+        scope: this,
+        callback : function () {
+            // POPULATING FIRST GRID
+            console.log('populating the currentWeather grid');
+            // Collecting data
+            let tempC = store.collect('temp')[0] - 273.15;
+            let pressure = store.collect('pressure')[0];
+            let humidity = store.collect('humidity')[0];
+            let temp_min = store.collect('temp_min')[0];
+            let temp_max = store.collect('temp_max')[0];
+            console.log(tempC, '*C ', pressure, ' hPa ', humidity, '%');
 
+            // Rounding temperature
+            tempC = Math.round(tempC * 100 ) / 100;
+            let amplitude = Math.round((temp_max - temp_min) * 100) / 100;
+
+            // Populating the data in panel
+            let data = "<div class='data'><p>Temperature: " + tempC + " Celsius </p><p>Pressure: " 
+                + pressure + " hPa </p>" + "<p>Humidity: " + humidity 
+                + "%</p><p>Temperature Amplitude will reach: " + amplitude 
+                + " Celsius</p></div>";
+
+            currentGrid.update(data);
+        }
+    });
+
+
+}
+
+async function populateOthersWeatherGrid(input, vm) {
+    console.log('populating the Others grid');
+    let store = Ext.data.StoreManager.lookup('wind');
+        
+    vm.set('query', input);
+    store.getProxy().url = 'https://api.openweathermap.org/data/2.5/weather?q=' +
+        vm.get('query') + '&appid=435b757eb1a5a697cbb51992ce5d7962';
+    let windGrid = Ext.get('othersContent');
+
+    await store.load({
+        scope: this,
+        callback : function() {
+            let data = "<div class='data'><p>Wind Speed: " + store.collect('speed') 
+            + " km/h </p><p>Wind blows in degree : " + store.collect('deg') + "* </p>"+
+                "Short weather's desc: " /*+ getCloudsDesc(input, vm)*/  + "</p></div>";
+            
+            console.log(store.collect('speed'), 'km/h', store.collect('deg'), '*');
+        
+            windGrid.update(data);
+        }
+    });
+
+    
+        // Change the store proxy's root property
+        //store.getProxy().getReader().setRootProperty('weather');
+        //store.load();
+        // Get the clouds's data
+        //var  weatherDesc = store.collect('description')[0];
+        //console.log(weatherDesc);
+        // Change the store proxy's root property    
+}
+
+function getCloudsDesc(input, vm){
+    console.log('Gathering weather desc data')
+    let store = Ext.data.StoreManager.lookup('clouds');
+        
+    vm.set('query', input);
+    store.getProxy().url = 'https://api.openweathermap.org/data/2.5/weather?q=' +
+        vm.get('query') + '&appid=435b757eb1a5a697cbb51992ce5d7962';
+    store.load();
+
+    let clouds = store.collect('description')[0];
+    console.log(clouds);
+
+    return clouds;
+}
 

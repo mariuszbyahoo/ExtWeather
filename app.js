@@ -20,6 +20,14 @@ Ext.onReady( function () {
     current.load();
     Ext.data.StoreManager.register(current);
 
+    let wind = Ext.create('ExtWeather.store.Wind');
+    wind.load();
+    Ext.data.StoreManager.register(wind);
+
+    let clouds = Ext.create('ExtWeather.store.Clouds');
+    clouds.load();
+    Ext.data.StoreManager.register(clouds);
+
     var forecast = Ext.create('ExtWeather.store.Forecast');
     forecast.load();
     Ext.data.StoreManager.register(forecast);
