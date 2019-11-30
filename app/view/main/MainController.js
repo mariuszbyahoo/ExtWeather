@@ -86,17 +86,16 @@ async function populateOthersWeatherGrid(input, vm) {
 
     await store.load({
         scope: this,
-        callback : function() {
+        callback : async function() {
+            if(store.collect('deg').length != 0) var deg = store.collect('deg') + "*";
+            else var deg = " specific direction is not provided by the API."; 
             let data = "<div class='data'><p>Wind Speed: " + store.collect('speed') 
-            + " km/h </p><p>Wind blows in degree : " + store.collect('deg') + "*</div>";
-            
-            console.log(store.collect('speed'), 'km/h', store.collect('deg'), '*');
-        
+            + " km/h </p><p>Wind blows in degree : " + deg + "</div>";
+            console.log(store.collect('speed'), 'km/h', deg);
             windGrid.update(data);
+            await populateCloudsGrid(input, vm); 
         }
     });
-
-    
         // Change the store proxy's root property
         //store.getProxy().getReader().setRootProperty('weather');
         //store.load();
@@ -106,18 +105,22 @@ async function populateOthersWeatherGrid(input, vm) {
         // Change the store proxy's root property    
 }
 
-async function getCloudsDesc(input, vm){
+async function populateCloudsGrid(input, vm){
     console.log('Gathering weather desc data')
     let store = Ext.data.StoreManager.lookup('clouds');
-        
+    let cloudsGrid = Ext.get('cloudsContent');
+
     vm.set('query', input);
     store.getProxy().url = 'https://api.openweathermap.org/data/2.5/weather?q=' +
         vm.get('query') + '&appid=435b757eb1a5a697cbb51992ce5d7962';
-    await store.load();
-
-    let clouds = store.collect('description')[0];
-    console.log(clouds);
-
-    return clouds;
+    await store.load({
+        scope: this,
+        callback: function () {
+            let clouds = store.collect('description')[0];
+            let data = "<div class='data'><p>Overall description: "+ clouds +"</p></div>";
+            cloudsGrid.update(data)
+            console.log(clouds);
+        }
+    });
 }
 

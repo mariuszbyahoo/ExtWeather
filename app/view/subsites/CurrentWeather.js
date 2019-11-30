@@ -39,15 +39,15 @@ Ext.define('ExtWeather.view.subsites.CurrentWeather',{
             id: 'othersGrid',
             viewModel: 'main',
             width: 600,
-            height: 200,
+            height: 500,
             margin: 20,
             items: [
                 {
                     xtype: 'panel',
                     id: 'windContent',
                     width: 400,
-                    height: 200,
-                    margin: 20,
+                    height: 60,
+                    margin: 10,
                     bind: {
                         html : '{startInfo}'
                     }
@@ -56,7 +56,17 @@ Ext.define('ExtWeather.view.subsites.CurrentWeather',{
                     xtype: 'panel',
                     id: 'cloudsContent',
                     width: 400,
-                    height: 200,
+                    height: 30,
+                    margin: 10,
+                    bind: {
+                        html: ''
+                    }
+                },
+                {
+                    xtype: 'panel',
+                    id: 'visibilityContent',
+                    width: 400,
+                    height: 150,
                     margin: 10
                 }
             ]
