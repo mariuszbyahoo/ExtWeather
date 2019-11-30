@@ -28,6 +28,10 @@ Ext.onReady( function () {
     clouds.load();
     Ext.data.StoreManager.register(clouds);
 
+    var rootInfo = Ext.create('ExtWeather.store.RootInfo');
+    rootInfo.load();
+    Ext.data.StoreManager.register(rootInfo);
+
     var forecast = Ext.create('ExtWeather.store.Forecast');
     forecast.load();
     Ext.data.StoreManager.register(forecast);
