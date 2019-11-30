@@ -93,19 +93,12 @@ async function populateOthersWeatherGrid(input, vm) {
             + " km/h </p><p>Wind blows in degree : " + deg + "</div>";
             console.log(store.collect('speed'), 'km/h', deg);
             windGrid.update(data);
-            await populateCloudsGrid(input, vm); 
+            await populateCloudsDiv(input, vm); 
         }
-    });
-        // Change the store proxy's root property
-        //store.getProxy().getReader().setRootProperty('weather');
-        //store.load();
-        // Get the clouds's data
-        //var  weatherDesc = store.collect('description')[0];
-        //console.log(weatherDesc);
-        // Change the store proxy's root property    
+    });   
 }
 
-async function populateCloudsGrid(input, vm){
+async function populateCloudsDiv(input, vm){
     let store = Ext.data.StoreManager.lookup('clouds');
     let cloudsGrid = Ext.get('cloudsContent');
 
@@ -119,12 +112,13 @@ async function populateCloudsGrid(input, vm){
             let data = "<div class='data'><p>Overall description: "+ clouds +"</p></div>";
             cloudsGrid.update(data)
             console.log(clouds);
+            populateVisibilityDiv(input, vm);
         }
     });
 }
 
-async function populateVisibilityGrid(input, vm) {
-    let store = Ext.data.StoreManager.lookup('visibility');
+async function populateVisibilityDiv(input, vm) {
+    let store = Ext.data.StoreManager.lookup('rootInfo');
     let visibilityGrid = Ext.get('visibilityContent');
 
     vm.set('query', input);
@@ -133,10 +127,10 @@ async function populateVisibilityGrid(input, vm) {
     await store.load({
         scope: this,
         callback: function () {
-            let clouds = store.collect('visibility')[0];
-            let data = "<div class='data'><p>Overall description: "+ clouds +"</p></div>";
-            cloudsGrid.update(data)
-            console.log(clouds);
+            let visibility = store.collect('visibility')[0];
+            let data = "<div class='data'><p>Visibility: "+ visibility +" meters</p></div>";
+            visibilityGrid.update(data)
+            console.log(visibility);
         }
     });
 }
