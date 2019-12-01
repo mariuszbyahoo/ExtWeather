@@ -26,19 +26,32 @@ Ext.define('ExtWeather.view.main.MainController', {
         let matches = regex.test(input);
 
         if (choice === 'ok' && matches) {
-            await populateBasicWeatherGrid(input, this.getViewModel()); // => 45
-            await populateOthersWeatherGrid(input, this.getViewModel()); // => 85
-        } else if (!matches){
+            await populateBasicWeatherGrid(input, this.getViewModel()); // => 46
+            await populateOthersWeatherGrid(input, this.getViewModel()); // => 80
+        } else if (choice === 'ok' && !matches ){
+            Ext.Msg.alert('Weird chars found', 
+                "Write only letters in the city's name, use ONLY english characters" 
+                + " do not use any special characters.\n Try again!");
+        } else {
+
+        }
+    },
+    onSubmitForecast: async function (choice, input) {
+        // using regex for check does input containing only letters
+        let regex = /^[A-Za-z]+$/; 
+        let matches = regex.test(input);
+
+        if (choice === 'ok' && matches) {
+            let store = Ext.data.StoreManager.lookup('forecast');
+            let vm = this.getViewModel();
+            vm.set('query', input);
+        } else if (choice === 'ok' && !matches){
             Ext.Msg.alert('Weird chars found', 
                 "Write only letters in the city's name, use ONLY english characters" 
                 + " do not use any special characters.\n Try again!");
         }
-    },
-    onSubmitForecast: async function (choice, input) {
-        if (choice === 'ok') {
-            let store = Ext.data.StoreManager.lookup('forecast');
-            let vm = this.getViewModel();
-            vm.set('query', input);
+        else {
+
         }
     }
 });
@@ -107,8 +120,8 @@ async function populateOthersWeatherGrid(input, vm) {
                 console.log("data : ",data);
 
                 windGrid.update(data);
-                await populateCloudsDiv(input, vm); // => 114
-                await populateTitle(input, vm); // => 151
+                await populateCloudsDiv(input, vm); // => 119
+                await populateTitle(input, vm); // => 158
             }else {
                 console.log('City not found');
             }   
@@ -129,8 +142,7 @@ async function populateCloudsDiv(input, vm){
             let clouds = store.collect('description')[0];
             let data = "<div class='data'><p>Overall description: "+ clouds +"</p></div>";
             cloudsGrid.update(data)
-            console.log(clouds);
-            populateVisibilityDiv(input, vm); // => 133
+            populateVisibilityDiv(input, vm); // => 137
         }
     });
 }
