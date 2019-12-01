@@ -15,6 +15,7 @@ Ext.application({
     mainView: 'ExtWeather.view.main.Main'
 });
 
+// Automatically ExtJs couldn't register my stores so I simplified it and I'm creating several stores
 Ext.onReady( function () {
     // Current Weather Stores:
     var current = Ext.create('ExtWeather.store.Current.Current');
@@ -29,12 +30,16 @@ Ext.onReady( function () {
     clouds.load();
     Ext.data.StoreManager.register(clouds);
 
-    var rootInfo = Ext.create('ExtWeather.store.Current.RootInfo');
+    let rootInfo = Ext.create('ExtWeather.store.Current.RootInfo');
     rootInfo.load();
     Ext.data.StoreManager.register(rootInfo);
 
     // Forecast Stores: 
-    var forecastCounter = Ext.create('ExtWeather.store.Forecast.ForecastCounter');
+    let forecastCounter = Ext.create('ExtWeather.store.Forecast.ForecastCounter');
     forecastCounter.load();
     Ext.data.StoreManager.register(forecastCounter);
+
+    let specificForecast = Ext.create('ExtWeather.store.Forecast.SpecificForecast');
+    specificForecast.load();
+    Ext.data.StoreManager.register(specificForecast);
 })

@@ -53,10 +53,7 @@ Ext.define('ExtWeather.view.main.MainController', {
                 scope: this,
                 callback: function(records, operation, success) {
                     if(success){
-                        forecastsCount = store.getCount();
-                        console.log(forecastsCount);
-                        // For each forecast in forecastCounter get data for that forecast 
-                        // and create a panel in ForecastMainPanel with it
+                        createPanels(input, vm, store.getCount()); // => 199
                     } else {
                         Ext.Msg.alert('404', "City not found in the API... Try again!");
                     }
@@ -194,7 +191,13 @@ async function populateTitle(input, vm){
 
 //  FORECAST FUNCTIONS:
 
-async function createPanels(input, vm){
+async function createPanels(input, vm, forecastsCount){
 
+    let store = Ext.data.StoreManager.lookup('specificForecast');
+    console.log('forecastsCount: ', forecastsCount);
+    for(let i = 0 ; i < forecastsCount ; i++) {
+        console.log('forecast no. ', i) // Change the store's URL and get the data.
+        // and create a panel in ForecastMainPanel with them
+    };
 }
 
