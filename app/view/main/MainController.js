@@ -44,19 +44,24 @@ Ext.define('ExtWeather.view.main.MainController', {
 
         if (choice === 'ok' && matches) {
             let vm = this.getViewModel();
-            
             let store = Ext.data.StoreManager.lookup('forecastCounter');
             vm.set('query', input);
+            store.getProxy().url = 'https://api.openweathermap.org/data/2.5/forecast?q=' +
+            vm.get('query') + '&appid=435b757eb1a5a697cbb51992ce5d7962';
 
             await store.load({
                 scope: this,
-                callback: function() {
-                    forecastsCount = store.getCount();
-                    console.log(forecastsCount);
-                    // For each forecast in forecastCounter get data for that forecast 
-                    // and create a panel in ForecastMainPanel with it
+                callback: function(records, operation, success) {
+                    if(success){
+                        forecastsCount = store.getCount();
+                        console.log(forecastsCount);
+                        // For each forecast in forecastCounter get data for that forecast 
+                        // and create a panel in ForecastMainPanel with it
+                    } else {
+                        Ext.Msg.alert('404', "City not found in the API... Try again!");
+                    }
                 }
-            })
+            });
         } else if (choice === 'ok' && !matches){
             Ext.Msg.alert('Weird chars found', 
                 "Write only letters in the city's name, use ONLY english characters" 
@@ -185,5 +190,11 @@ async function populateTitle(input, vm){
         Ext.ComponentManager.get('currentRootPanel').setTitle('Weather in ' + title); 
         }
     });
+}
+
+//  FORECAST FUNCTIONS:
+
+async function createPanels(input, vm){
+
 }
 
