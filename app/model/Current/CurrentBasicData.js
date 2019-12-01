@@ -1,7 +1,7 @@
-Ext.define('ExtWeather.model.CurrentBasicData', {
+Ext.define('ExtWeather.model.Current.CurrentBasicData', {
     extend: 'ExtWeather.model.Base',
 
-    alias: 'model.currentBasicData',
+    alias: 'model.current.currentBasicData',
 
     fields: [
         'temp', 'pressure', 'humidity', 'temp_max', 'temp_min'

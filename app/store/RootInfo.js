@@ -1,7 +1,7 @@
 Ext.define('ExtWeather.store.RootInfo' , {
     extend: 'Ext.data.Store', 
 
-    model: 'ExtWeather.model.CurrentRootInfo',
+    model: 'ExtWeather.model.Current.CurrentRootInfo',
 
     storeId: 'rootInfo',
 

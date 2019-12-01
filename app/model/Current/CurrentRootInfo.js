@@ -1,7 +1,7 @@
-Ext.define('ExtWeather.model.CurrentRootInfo', {
+Ext.define('ExtWeather.model.Current.CurrentRootInfo', {
     extend: 'ExtWeather.model.Base',
 
-    alias: 'model.currentRootInfo',
+    alias: 'model.current.currentRootInfo',
 
     fields: [
         'base', 'cod', 'visibility', 'dt', 'id', 'name', 'timezone', 'visibility'

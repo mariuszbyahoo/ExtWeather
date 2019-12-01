@@ -1,7 +1,7 @@
-Ext.define('ExtWeather.model.CurrentCloudsData', {
+Ext.define('ExtWeather.model.Current.CurrentCloudsData', {
     extend: 'ExtWeather.model.Base',
 
-    alias: 'model.currentCloudsData',
+    alias: 'model.current.currentCloudsData',
 
     fields: [
         'id', 'main', 'icon', 'description'

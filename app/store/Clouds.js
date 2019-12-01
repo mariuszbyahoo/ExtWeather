@@ -1,7 +1,7 @@
 Ext.define('ExtWeather.store.Clouds' , {
     extend: 'Ext.data.Store', 
 
-    model: 'ExtWeather.model.CurrentCloudsData',
+    model: 'ExtWeather.model.Current.CurrentCloudsData',
 
     storeId: 'clouds',
 
