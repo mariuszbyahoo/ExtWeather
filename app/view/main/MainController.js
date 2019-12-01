@@ -30,7 +30,8 @@ Ext.define('ExtWeather.view.main.MainController', {
             await populateOthersWeatherGrid(input, this.getViewModel()); // => 85
         } else if (!matches){
             Ext.Msg.alert('Weird chars found', 
-                "Write only letters in the city's name, do not use any special characters.\n Try again!");
+                "Write only letters in the city's name, use ONLY english characters" 
+                + " do not use any special characters.\n Try again!");
         }
     },
     onSubmitForecast: async function (choice, input) {
@@ -59,15 +60,14 @@ async function populateBasicWeatherGrid(input, vm) {
                 let humidity = store.collect('humidity')[0];
                 let temp_min = store.collect('temp_min')[0];
                 let temp_max = store.collect('temp_max')[0];
-                console.log(tempC, '*C ', pressure, ' hPa ', humidity, '%');
 
                 tempC = Math.round(tempC * 100 ) / 100;
                 let amplitude = Math.round((temp_max - temp_min) * 100) / 100;
 
-                let data = "<div class='data'><p>Temperature: " + tempC + " Celsius </p><p>Pressure: " 
+                let data = "<div class='data'><p>Temperature: " + tempC + '\u2103' + "</p><p>Pressure: " 
                     + pressure + " hPa </p>" + "<p>Humidity: " + humidity 
                     + "%</p><p>Temperature Amplitude will reach: " + amplitude 
-                    + " Celsius</p></div>";
+                    + '\u2103' + "</p></div>";
 
                 currentGrid.update(data);
             } else {
@@ -91,11 +91,21 @@ async function populateOthersWeatherGrid(input, vm) {
             scope: this,
             callback : async function(records, operation, success) {
             if(success){
-                if(store.collect('deg').length != 0) var deg = store.collect('deg') + "*";
-                else var deg = " specific direction is not provided by the API."; 
-                let data = "<div class='data'><p>Wind Speed: " + store.collect('speed') 
-                + " km/h </p><p>Wind blows in degree : " + deg + "</div>";
-                console.log(store.collect('speed'), 'km/h', deg);
+                if(store.collect('deg').length != 0) var deg = store.collect('deg') + '\u00B0';
+                else var deg = null; 
+                if(store.collect('speed').length != 0) var speed = store.collect('speed') + 'km/h';
+                else var speed = null;
+                let data = "";
+
+                console.log("speed : ",speed);
+                console.log("store.collect('speed').length : ",store.collect('speed').length);
+
+
+                if(deg != null) data += "<p>Wind blows in degree : " + deg + "</p>";
+                if(speed != null) data += "<p>Wind Speed: " + speed + " km/h </p>"; 
+
+                console.log("data : ",data);
+
                 windGrid.update(data);
                 await populateCloudsDiv(input, vm); // => 114
                 await populateTitle(input, vm); // => 151
@@ -136,9 +146,12 @@ async function populateVisibilityDiv(input, vm) {
         scope: this,
         callback: function () {
             let visibility = store.collect('visibility')[0];
-            let data = "<div class='data'><p>Visibility: "+ visibility +" meters</p></div>";
-            visibilityGrid.update(data)
-            console.log(visibility);
+            if(visibility){
+                let data = "<div class='data'><p>Visibility: "+ visibility +" meters</p></div>";
+                visibilityGrid.update(data);
+            } else {
+                visibilityGrid.update('<p></p>');
+            }
         }
     });
 }
