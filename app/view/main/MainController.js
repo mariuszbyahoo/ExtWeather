@@ -21,8 +21,8 @@ Ext.define('ExtWeather.view.main.MainController', {
     },
 
     onSubmitWeather: async function (choice, input) { 
-        // using regex for check does input containing only letters
-        let regex = /^[A-Za-z]+$/; // DO POPRAWY > np. LOS ANGELES NIE PRZEJDZIE BO SPACJA
+        // using regex for check does input containing only letters (at the beggining)
+        let regex = /^[A-Za-z]/; 
         let matches = regex.test(input);
 
         if (choice === 'ok' && matches) {
@@ -37,8 +37,8 @@ Ext.define('ExtWeather.view.main.MainController', {
         }
     },
     onSubmitForecast: async function (choice, input) {
-        // using regex for check does input containing only letters
-        let regex = /^[A-Za-z]+$/; // DO POPRAWY > np. LOS ANGELES NIE PRZEJDZIE BO SPACJA
+        // using regex for check does input containing only letters (at the beggining)
+        let regex = /^[A-Za-z]/; 
         let matches = regex.test(input);
         let forecastsCount = 0;
 
