@@ -16,23 +16,25 @@ Ext.application({
 });
 
 Ext.onReady( function () {
-    var current = Ext.create('ExtWeather.store.Current');
+    // Current Weather Stores:
+    var current = Ext.create('ExtWeather.store.Current.Current');
     current.load();
     Ext.data.StoreManager.register(current);
 
-    let wind = Ext.create('ExtWeather.store.Wind');
+    let wind = Ext.create('ExtWeather.store.Current.Wind');
     wind.load();
     Ext.data.StoreManager.register(wind);
 
-    let clouds = Ext.create('ExtWeather.store.Clouds');
+    let clouds = Ext.create('ExtWeather.store.Current.Clouds');
     clouds.load();
     Ext.data.StoreManager.register(clouds);
 
-    var rootInfo = Ext.create('ExtWeather.store.RootInfo');
+    var rootInfo = Ext.create('ExtWeather.store.Current.RootInfo');
     rootInfo.load();
     Ext.data.StoreManager.register(rootInfo);
 
-    var forecastCounter = Ext.create('ExtWeather.store.ForecastCounter');
+    // Forecast Stores: 
+    var forecastCounter = Ext.create('ExtWeather.store.Forecast.ForecastCounter');
     forecastCounter.load();
     Ext.data.StoreManager.register(forecastCounter);
 })

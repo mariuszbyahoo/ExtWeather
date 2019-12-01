@@ -1,4 +1,4 @@
-Ext.define('ExtWeather.store.Current' , {
+Ext.define('ExtWeather.store.Current.Current' , {
     extend: 'Ext.data.Store', 
 
     model: 'ExtWeather.model.Current.CurrentBasicData',

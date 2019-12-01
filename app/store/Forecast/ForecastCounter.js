@@ -1,4 +1,4 @@
-Ext.define('ExtWeather.store.ForecastCounter' , {
+Ext.define('ExtWeather.store.Forecast.ForecastCounter' , {
     extend: 'Ext.data.Store', 
 
     model: 'ExtWeather.model.Forecast.ForecastCounter',
