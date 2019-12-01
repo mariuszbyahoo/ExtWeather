@@ -14,10 +14,10 @@ Ext.define('ExtWeather.view.main.MainController', {
             'onSubmitWeather', this);
     },
 
-    onForecastSelected: async function () {
+    onForecastSelected: async function () { // => 39
             Ext.Msg.prompt('Forecast', 
             'Type an english name of the city, which you are looking forecast for:', 
-            'onSubmitForecast', this);
+            'onSubmitForecast', this); 
     },
 
     onSubmitWeather: async function (choice, input) { 
@@ -53,7 +53,7 @@ Ext.define('ExtWeather.view.main.MainController', {
                 scope: this,
                 callback: function(records, operation, success) {
                     if(success){
-                        createPanels(input, vm, store.getCount()); // => 199
+                        createPanels(input, vm, store.getCount()); // => 194
                     } else {
                         Ext.Msg.alert('404', "City not found in the API... Try again!");
                     }
@@ -191,13 +191,56 @@ async function populateTitle(input, vm){
 
 //  FORECAST FUNCTIONS:
 
-async function createPanels(input, vm, forecastsCount){
+function createPanels(input, vm, forecastsCount){
 
-    let store = Ext.data.StoreManager.lookup('specificForecast');
-    console.log('forecastsCount: ', forecastsCount);
     for(let i = 0 ; i < forecastsCount ; i++) {
-        console.log('forecast no. ', i) // Change the store's URL and get the data.
-        // and create a panel in ForecastMainPanel with them
+        // Change the store's URL and get the data.
+        let store = new ExtWeather.store.Forecast.SpecificForecast();
+        let mainPanel = Ext.ComponentManager.get('forecastMainPanel'); 
+
+        store.getProxy().getReader().setRootProperty('list['+ i +'].main');
+        vm.set('query', input);
+        store.getProxy().url = 'https://api.openweathermap.org/data/2.5/forecast?q=' +
+            vm.get('query') + '&appid=435b757eb1a5a697cbb51992ce5d7962';
+        
+        store.load({
+            scope: this,
+            callback : async function (records, operation, success) {
+                if(success){
+                    /*
+                        Insert destroying the forecasts panel when called for the next time
+                    */
+                   let currentPanel = new Ext.panel.Panel();
+                   currentPanel.setId('currentPanel' + i);
+                   console.log(currentPanel);
+
+                    if(i === 0) Ext.ComponentManager.get('forecastMainPanel').setTitle('Tu będzie store.collect() ale potrzeba dostać się do root');
+
+                    let tempC = store.collect('temp')[0] - 273.15;
+                    let pressure = store.collect('pressure')[0];
+                    let humidity = store.collect('humidity')[0];
+                    let temp_min = store.collect('temp_min')[0];
+                    let temp_max = store.collect('temp_max')[0];
+
+                    tempC = Math.round(tempC * 100 ) / 100;
+                    let amplitude = Math.round((temp_max - temp_min) * 100) / 100;
+
+                    // and create a panel in ForecastMainPanel with them
+                    let data = "<div class='data'><p>Temperature: " + tempC + '\u2103' + "</p><p>Pressure: " 
+                        + pressure + " hPa </p>" + "<p>Humidity: " + humidity + "</p></div>";
+
+                    currentPanel.update(data); 
+                    currentPanel.setTitle('Forecast no.' + i);
+
+                    mainPanel.add(currentPanel); // change this to func which will ensure about adding it 
+                    // before the panel with a lower ID
+                    mainPanel.updateLayout();
+
+                } else {
+                    Ext.Msg.alert('404', "City not found in the API... Try again!");
+                }
+            }
+        });
     };
 }
 
