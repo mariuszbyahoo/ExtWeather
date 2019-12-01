@@ -40,11 +40,23 @@ Ext.define('ExtWeather.view.main.MainController', {
         // using regex for check does input containing only letters
         let regex = /^[A-Za-z]+$/; // DO POPRAWY > np. LOS ANGELES NIE PRZEJDZIE BO SPACJA
         let matches = regex.test(input);
+        let forecastsCount = 0;
 
         if (choice === 'ok' && matches) {
-            let store = Ext.data.StoreManager.lookup('forecastCounter');
             let vm = this.getViewModel();
+            
+            let store = Ext.data.StoreManager.lookup('forecastCounter');
             vm.set('query', input);
+
+            await store.load({
+                scope: this,
+                callback: function() {
+                    forecastsCount = store.getCount();
+                    console.log(forecastsCount);
+                    // For each forecast in forecastCounter get data for that forecast 
+                    // and create a panel in ForecastMainPanel with it
+                }
+            })
         } else if (choice === 'ok' && !matches){
             Ext.Msg.alert('Weird chars found', 
                 "Write only letters in the city's name, use ONLY english characters" 
