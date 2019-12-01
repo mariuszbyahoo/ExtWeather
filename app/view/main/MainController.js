@@ -8,7 +8,7 @@ Ext.define('ExtWeather.view.main.MainController', {
 
     store: Ext.data.StoreManager.lookup('current'),
 
-    onCurrentSelected: async function () {
+    onCurrentSelected: async function () { // => 23
             Ext.Msg.prompt('Weather', 
             'Type an english name of the city, which you are looking weather for:', 
             'onSubmitWeather', this);
@@ -20,11 +20,17 @@ Ext.define('ExtWeather.view.main.MainController', {
             'onSubmitForecast', this);
     },
 
-    onSubmitWeather: async function (choice, input) {
-        if (choice === 'ok') {
-            console.log('Looking for weather in: ', input);
-            await populateBasicWeatherGrid(input, this.getViewModel());
-            await populateOthersWeatherGrid(input, this.getViewModel());
+    onSubmitWeather: async function (choice, input) { 
+        // using regex for check does input containing only letters
+        let regex = /^[A-Za-z]+$/; 
+        let matches = regex.test(input);
+
+        if (choice === 'ok' && matches) {
+            await populateBasicWeatherGrid(input, this.getViewModel()); // => 45
+            await populateOthersWeatherGrid(input, this.getViewModel()); // => 85
+        } else if (!matches){
+            Ext.Msg.alert('Weird chars found', 
+                "Write only letters in the city's name, do not use any special characters.\n Try again!");
         }
     },
     onSubmitForecast: async function (choice, input) {
@@ -48,9 +54,6 @@ async function populateBasicWeatherGrid(input, vm) {
         scope: this,
         callback : function (records, operation, success) {
             if(success){
-                // POPULATING FIRST GRID
-                console.log('populating the currentWeather grid');
-                // Collecting data
                 let tempC = store.collect('temp')[0] - 273.15;
                 let pressure = store.collect('pressure')[0];
                 let humidity = store.collect('humidity')[0];
@@ -58,11 +61,9 @@ async function populateBasicWeatherGrid(input, vm) {
                 let temp_max = store.collect('temp_max')[0];
                 console.log(tempC, '*C ', pressure, ' hPa ', humidity, '%');
 
-                // Rounding temperature
                 tempC = Math.round(tempC * 100 ) / 100;
                 let amplitude = Math.round((temp_max - temp_min) * 100) / 100;
 
-                // Populating the data in panel
                 let data = "<div class='data'><p>Temperature: " + tempC + " Celsius </p><p>Pressure: " 
                     + pressure + " hPa </p>" + "<p>Humidity: " + humidity 
                     + "%</p><p>Temperature Amplitude will reach: " + amplitude 
@@ -96,8 +97,8 @@ async function populateOthersWeatherGrid(input, vm) {
                 + " km/h </p><p>Wind blows in degree : " + deg + "</div>";
                 console.log(store.collect('speed'), 'km/h', deg);
                 windGrid.update(data);
-                await populateCloudsDiv(input, vm); 
-                await populateTitle(input, vm);
+                await populateCloudsDiv(input, vm); // => 114
+                await populateTitle(input, vm); // => 151
             }else {
                 console.log('City not found');
             }   
@@ -119,7 +120,7 @@ async function populateCloudsDiv(input, vm){
             let data = "<div class='data'><p>Overall description: "+ clouds +"</p></div>";
             cloudsGrid.update(data)
             console.log(clouds);
-            populateVisibilityDiv(input, vm);
+            populateVisibilityDiv(input, vm); // => 133
         }
     });
 }
