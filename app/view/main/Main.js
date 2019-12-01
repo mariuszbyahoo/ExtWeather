@@ -80,7 +80,7 @@ Ext.define('ExtWeather.view.main.Main', {
         autoScroll: true,
         items: [
             {
-                xtype: 'forecast'
+                xtype: 'forecastMainPanel'
             }
         ],
         listeners:{

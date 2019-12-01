@@ -32,7 +32,7 @@ Ext.onReady( function () {
     rootInfo.load();
     Ext.data.StoreManager.register(rootInfo);
 
-    var forecast = Ext.create('ExtWeather.store.Forecast');
-    forecast.load();
-    Ext.data.StoreManager.register(forecast);
+    var forecastCounter = Ext.create('ExtWeather.store.ForecastCounter');
+    forecastCounter.load();
+    Ext.data.StoreManager.register(forecastCounter);
 })
