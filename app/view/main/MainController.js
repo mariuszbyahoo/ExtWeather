@@ -106,7 +106,6 @@ async function populateBasicWeatherGrid(input, vm) {
 
 async function populateOthersWeatherGrid(input, vm) {
     
-        console.log('populating the Others grid');
         let store = Ext.data.StoreManager.lookup('wind');
             
         vm.set('query', input);
@@ -125,7 +124,6 @@ async function populateOthersWeatherGrid(input, vm) {
                 let data = "";
                 if(deg != null) data += "<p>Wind blows in degree : " + deg + "</p>";
                 if(speed != null) data += "<p>Wind Speed: " + speed + " km/h </p>"; 
-                console.log("data : ",data);
                 windGrid.update(data);
                 await populateCloudsDiv(input, vm); // => 125
                 await populateTitle(input, vm); // => 164
@@ -242,8 +240,7 @@ async function createPanels(input, vm, counterStore){
 
                     currentPanel.update(data); 
 
-                    
-                    currentPanel.setTitle('Forecast no.' + i);
+                    currentPanel.setTitle(counterStore.collect('dt_txt')[i]);
 
                     mainPanel.insert(i, currentPanel); 
                     mainPanel.updateLayout();
