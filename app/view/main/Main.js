@@ -100,5 +100,18 @@ Ext.define('ExtWeather.view.main.Main', {
         listeners:{
             activate: 'onForecastSelected',
         }
+    }, {
+        title: '5 Day Forecast (Grid)',
+        items: [
+            {
+                xtype: 'panel',
+                layout: 'auto',
+                items: [
+                    { 
+                        xtype: 'forecastGrid'
+                    }
+                ]
+            }
+        ]
     }]
 });
