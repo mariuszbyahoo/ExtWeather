@@ -4,16 +4,20 @@ Ext.define('ExtWeather.view.subsites.ForecastGrid', {
     title: '5 day forecast',
     columns:[
         {
+            text: 'DateTime',
+            flex: 1
+        },
+        {
             text: 'Temperature',
+            flex: 1
         },
         {
-            text: 'DateTime'
+            text: 'Pressure',
+            flex: 1
         },
         {
-            text: 'Pressure'
-        },
-        {
-            text: 'Humidity'
+            text: 'Humidity',
+            flex: 1
         }
     ]
 })
