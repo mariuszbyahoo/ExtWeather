@@ -190,12 +190,14 @@ async function populateTitle(input, vm){
 //  FORECAST FUNCTIONS:
 
 async function createPanels(input, vm, counterStore){
+    let mainPanel = Ext.ComponentManager.get('forecastMainPanel'); 
     let forecastsCount = counterStore.count();
+    
+    if(vm.get('areForecastsPopulated') == true) mainPanel.removeAll(true);
 
     for(let i = 0 ; i < forecastsCount ; i++) {
         let specificForecastDataStore = new ExtWeather.store.Forecast.SpecificForecast(); 
             //creating a new store because of the asynchronousness
-        let mainPanel = Ext.ComponentManager.get('forecastMainPanel'); 
             // Change the store's URL and get the data.
         specificForecastDataStore.getProxy().getReader().setRootProperty('list['+ i +'].main');
         vm.set('query', input);
@@ -205,9 +207,7 @@ async function createPanels(input, vm, counterStore){
             scope: this,
             callback : async function (records, operation, success) {
                 if(success){
-                    /*
-                        Insert destroying the forecasts panel when called for the next time
-                    */
+
                    let currentPanel = new Ext.panel.Panel({
                        xtype: 'specificForecastPanel', // adding this will make destroying easier
                    });
@@ -244,6 +244,7 @@ async function createPanels(input, vm, counterStore){
 
                     mainPanel.insert(i, currentPanel); 
                     mainPanel.updateLayout();
+                    vm.set('areForecastsPopulated', true);
 
                 } else {
                     Ext.Msg.alert('404', "City not found in the API... Try again!");
