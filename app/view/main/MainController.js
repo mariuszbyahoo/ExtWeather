@@ -194,14 +194,15 @@ async function populateTitle(input, vm){
 async function createPanels(input, vm, forecastsCount){
 
     for(let i = 0 ; i < forecastsCount ; i++) {
-        let store = new ExtWeather.store.Forecast.SpecificForecast();
+        let specificForecastDataStore = new ExtWeather.store.Forecast.SpecificForecast(); 
+            //creating a new store because of the asynchronousness
         let mainPanel = Ext.ComponentManager.get('forecastMainPanel'); 
-        // Change the store's URL and get the data.
-        store.getProxy().getReader().setRootProperty('list['+ i +'].main');
+            // Change the store's URL and get the data.
+        specificForecastDataStore.getProxy().getReader().setRootProperty('list['+ i +'].main');
         vm.set('query', input);
-        store.getProxy().url = 'https://api.openweathermap.org/data/2.5/forecast?q=' +
+        specificForecastDataStore.getProxy().url = 'https://api.openweathermap.org/data/2.5/forecast?q=' +
             vm.get('query') + '&appid=435b757eb1a5a697cbb51992ce5d7962';
-        await store.load({ 
+        await specificForecastDataStore.load({ 
             scope: this,
             callback : async function (records, operation, success) {
                 if(success){
@@ -212,13 +213,25 @@ async function createPanels(input, vm, forecastsCount){
                        xtype: 'specificForecastPanel', // adding this will make destroying easier
                    });
 
-                    if(i === 0) Ext.ComponentManager.get('forecastMainPanel').setTitle('Tu będzie store.collect() ale potrzeba dostać się do root');
+                   // Cannot set it nicely, (title first) because of that the status of store's call will be 
+                   // unknown at the beginning, must be in specificForecastDataStore.load()'s callback
+                    if(i === 0){ // Setting the Main panel's title:
+                        let forecastCityStore = Ext.data.StoreManager.lookup('forecastCity');
+                        forecastCityStore.getProxy().url = specificForecastDataStore.getProxy().url;
+                        await forecastCityStore.load({
+                            scope: this,
+                            callback: async function (records, operation, success){
+                                if(success){
+                                    Ext.ComponentManager.get('forecastMainPanel').
+                                        setTitle('Weather Forecast for: ' + forecastCityStore.collect('name'));
+                                }
+                            }
+                        });
+                    }
 
-                    let tempC = store.collect('temp')[0] - 273.15;
-                    let pressure = store.collect('pressure')[0];
-                    let humidity = store.collect('humidity')[0];
-                    let temp_min = store.collect('temp_min')[0];
-                    let temp_max = store.collect('temp_max')[0];
+                    let tempC = specificForecastDataStore.collect('temp')[0] - 273.15;
+                    let pressure = specificForecastDataStore.collect('pressure')[0];
+                    let humidity = specificForecastDataStore.collect('humidity')[0];
 
                     tempC = Math.round(tempC * 100 ) / 100;
 
