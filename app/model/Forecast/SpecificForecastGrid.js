@@ -1,7 +1,7 @@
-Ext.define('ExtWeather.model.Forecast.SpecificForecast', {
+Ext.define('ExtWeather.model.Forecast.SpecificForecastGrid', {
     extend: 'ExtWeather.model.Base',
 
-    alias: 'model.forecast.specificForecast',
+    alias: 'model.forecast.specificForecastGrid',
 
     fields: [
         {
