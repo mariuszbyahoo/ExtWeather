@@ -4,6 +4,8 @@ Ext.define('ExtWeather.view.subsites.CurrentWeather',{
     layout: 'hbox',
     viewModel: 'main',
     id: 'currentRootPanel',
+    title: 'Check the current weather',
+    titleAlign: 'center',
 
     buttons: [
         {
@@ -18,6 +20,7 @@ Ext.define('ExtWeather.view.subsites.CurrentWeather',{
             title: 'Basic weather info',
             id: 'currentGrid',
             viewModel: 'main',
+            titleAlign: 'center',
             width: 600,
             height: 200,
             margin: 20,
@@ -39,6 +42,7 @@ Ext.define('ExtWeather.view.subsites.CurrentWeather',{
             title: 'Visibility, clouds, and wind',
             id: 'othersGrid',
             viewModel: 'main',
+            titleAlign: 'center',
             width: 600,
             height: 250,
             margin: 20,
@@ -68,7 +72,7 @@ Ext.define('ExtWeather.view.subsites.CurrentWeather',{
                     id: 'visibilityContent',
                     width: 400,
                     height: 30,
-                    margin: 10
+                    margin: 10,
                 }
             ]
         }

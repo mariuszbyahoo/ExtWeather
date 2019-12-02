@@ -26,7 +26,7 @@ Ext.define('ExtWeather.view.main.MainController', {
         let matches = regex.test(input);
 
         if (choice === 'ok' && matches) {
-            await populateBasicWeatherGrid(input, this.getViewModel()); // => 59
+            await populateBasicWeatherGrid(input, this.getViewModel()); // => 73
             await populateOthersWeatherGrid(input, this.getViewModel()); // => 93
         } else if (choice === 'ok' && !matches ){
             Ext.Msg.alert('Weird chars found', 
@@ -183,6 +183,7 @@ async function populateTitle(input, vm){
         callback: function () {
         let title = store.collect('name')[0];
         Ext.ComponentManager.get('currentRootPanel').setTitle('Weather in ' + title); 
+        Ext.ComponentManager.get('currentRootPanel').setTitleAlign('center'); 
         }
     });
 }
@@ -192,7 +193,7 @@ async function populateTitle(input, vm){
 async function createPanels(input, vm, counterStore){
     let mainPanel = Ext.ComponentManager.get('forecastMainPanel'); 
     let forecastsCount = counterStore.count();
-    
+
     if(vm.get('areForecastsPopulated') == true) mainPanel.removeAll(true);
 
     for(let i = 0 ; i < forecastsCount ; i++) {
@@ -210,6 +211,7 @@ async function createPanels(input, vm, counterStore){
 
                    let currentPanel = new Ext.panel.Panel({
                        xtype: 'specificForecastPanel', // adding this will make destroying easier
+                       titleAlign: 'center'
                    });
 
                    // Cannot set it nicely, (title first) because of that the status of store's call will be 
@@ -241,11 +243,14 @@ async function createPanels(input, vm, counterStore){
                     currentPanel.update(data); 
 
                     currentPanel.setTitle(counterStore.collect('dt_txt')[i]);
-
                     mainPanel.insert(i, currentPanel); 
                     mainPanel.updateLayout();
                     vm.set('areForecastsPopulated', true);
-
+                    if(i == (forecastsCount - 1)) {
+                        currentPanel.afterShow(window.scrollTo(0,0));
+                        console.log('scrolling');
+                        console.log(currentPanel);
+                    };
                 } else {
                     Ext.Msg.alert('404', "City not found in the API... Try again!");
                 }
