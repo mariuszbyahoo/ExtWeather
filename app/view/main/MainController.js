@@ -246,11 +246,6 @@ async function createPanels(input, vm, counterStore){
                     mainPanel.insert(i, currentPanel); 
                     mainPanel.updateLayout();
                     vm.set('areForecastsPopulated', true);
-                    if(i == (forecastsCount - 1)) {
-                        currentPanel.afterShow(window.scrollTo(0,0));
-                        console.log('scrolling');
-                        console.log(currentPanel);
-                    };
                 } else {
                     Ext.Msg.alert('404', "City not found in the API... Try again!");
                 }

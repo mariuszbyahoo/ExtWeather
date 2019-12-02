@@ -78,9 +78,23 @@ Ext.define('ExtWeather.view.main.Main', {
         title: 'Weather Forecast',
         iconCls: 'far fa-question-circle',
         autoScroll: true,
+        bbar: [
+            {
+                text: 'Load',
+                width: 100,
+                align: 'center',
+                handler: 'onForecastSelected'
+            }
+        ],
         items: [
             {
-                xtype: 'forecastMainPanel'
+                xtype: 'panel',
+                layout: 'auto',
+                items: [
+                    {
+                        xtype: 'forecastMainPanel'
+                    }
+                ]
             }
         ],
         listeners:{

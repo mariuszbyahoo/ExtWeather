@@ -5,11 +5,5 @@ Ext.define('ExtWeather.view.subsites.ForecastMainPanel',{
     layout: 'accordion',
     titleAlign: 'center',
     title: 'OpenWeatherAPI Forecast',
-    textAlign: 'center',
-    buttons: [
-        {
-            text: 'Load',
-            handler: 'onForecastSelected'
-        }
-    ]
+    textAlign: 'center'
 })
