@@ -39,7 +39,12 @@ Ext.onReady( function () {
     forecastCounter.load();
     Ext.data.StoreManager.register(forecastCounter);
 
+    let forecastCity = Ext.create('ExtWeather.store.Forecast.ForecastCity');
+    forecastCity.load();
+    Ext.data.StoreManager.register(forecastCity);
+
     let specificForecast = Ext.create('ExtWeather.store.Forecast.SpecificForecast');
     specificForecast.load();
     Ext.data.StoreManager.register(specificForecast);
+
 })
