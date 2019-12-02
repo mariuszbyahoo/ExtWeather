@@ -2,6 +2,11 @@ Ext.define('ExtWeather.view.subsites.ForecastGrid', {
     extend: 'Ext.grid.Panel',
     xtype: 'forecastGrid',
     title: '5 day forecast',
+    store: {
+        storeId: 'SpecificForecastGridStore',
+        model: 'ExtWeather.model.Forecast.SpecificForecastGrid',
+        autoLoad: true
+    },
     columns:[
         {
             text: 'DateTime',

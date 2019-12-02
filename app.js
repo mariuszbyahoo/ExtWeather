@@ -47,8 +47,4 @@ Ext.onReady( function () {
     specificForecast.load();
     Ext.data.StoreManager.register(specificForecast);
 
-    let specificForecastGrid = Ext.create('ExtWeather.store.Forecast.SpecificForecastGrid');
-    specificForecastGrid.load();
-    Ext.data.StoreManager.register(specificForecastGrid);
-
 })
