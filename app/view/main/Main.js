@@ -112,6 +112,9 @@ Ext.define('ExtWeather.view.main.Main', {
                     }
                 ]
             }
-        ]
+        ],
+        listeners:{
+            activate: 'onGridForecastSelected',
+        }
     }]
 });

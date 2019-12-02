@@ -67,6 +67,21 @@ Ext.define('ExtWeather.view.main.MainController', {
         else {
 
         }
+    },
+
+    onGridForecastSelected : async function (){
+        let SpecificForecastGridStore = Ext.data.StoreManager.lookup('SpecificForecastGridStore')
+        SpecificForecastGridStore.load({
+            scope: this,
+            callback: function(){
+                let forecastsArray = SpecificForecastGridStore.data.items;
+                console.log('loaded SpecificForecastGridStore');
+                for(i = 0 ; i < forecastsArray.length; i ++){
+                    let localDateTime = forecastsArray[i].data.dt_txt
+                    console.log(localDateTime); // this value will be needed during formatting
+                }
+            }
+        });
     }
 });
 
@@ -253,4 +268,3 @@ async function createPanels(input, vm, counterStore){
         });
     };
 }
-
