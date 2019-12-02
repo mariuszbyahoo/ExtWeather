@@ -53,7 +53,7 @@ Ext.define('ExtWeather.view.main.MainController', {
                 scope: this,
                 callback: async function(records, operation, success) {
                     if(success){
-                        await createPanels(input, vm, store.getCount()); // => 194
+                        await createPanels(input, vm, store); // => 194
                     } else {
                         Ext.Msg.alert('404', "City not found in the API... Try again!");
                     }
@@ -191,7 +191,8 @@ async function populateTitle(input, vm){
 
 //  FORECAST FUNCTIONS:
 
-async function createPanels(input, vm, forecastsCount){
+async function createPanels(input, vm, counterStore){
+    let forecastsCount = counterStore.count();
 
     for(let i = 0 ; i < forecastsCount ; i++) {
         let specificForecastDataStore = new ExtWeather.store.Forecast.SpecificForecast(); 
@@ -240,6 +241,8 @@ async function createPanels(input, vm, forecastsCount){
                         + pressure + " hPa </p>" + "<p>Humidity: " + humidity + "</p></div>";
 
                     currentPanel.update(data); 
+
+                    
                     currentPanel.setTitle('Forecast no.' + i);
 
                     mainPanel.insert(i, currentPanel); 
