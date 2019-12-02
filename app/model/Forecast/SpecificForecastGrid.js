@@ -6,28 +6,31 @@ Ext.define('ExtWeather.model.Forecast.SpecificForecastGrid', {
     fields: [
         {
             name: 'temp',
-            mapping: '[main].temp'
+            mapping: 'main.temp'
         }, {
             name: 'temp_min',
-            mapping: '[main].temp_min'
+            mapping: 'main.temp_min'
         }, {
             name: 'temp_max',
-            mapping: '[main].temp_max'
+            mapping: 'main.temp_max'
         }, {
             name: 'pressure',
-            mapping: '[main].pressure'
+            mapping: 'main.pressure'
         }, {
             name: 'sea_level', 
-            mapping: '[main].sea_level'
+            mapping: 'main.sea_level'
         }, {
             name: 'grnd_level', 
-            mapping: '[main].grnd_level'
+            mapping: 'main.grnd_level'
         }, {
             name: 'humidity', 
-            mapping: '[main].humidity'
+            mapping: 'main.humidity'
         }, {
             name: 'temp_kf',
-            mappint: '[main].temp_kf'
+            mappint: 'main.temp_kf'
+        }, {
+            name: 'dt_txt',
+            mapping: 'dt_txt'
         }
     ]
 });
