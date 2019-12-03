@@ -30,5 +30,17 @@ Ext.define('ExtWeather.view.subsites.ForecastGrid', {
             flex: 1,
             dataIndex: 'humidity',
         }
-    ]
+    ],
+
+    plugins: [{
+        ptype: 'rowwidget',
+        widget: {
+            xtype: 'panel',
+            name: 'image',
+            html: '<p>Loading image...</p>',
+            beforeRender: function(){
+                this.update('Loaded!!!'); // How to do that while init comp change hmtl??
+            }
+        }
+    }]
 })
