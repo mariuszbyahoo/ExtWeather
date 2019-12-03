@@ -6,6 +6,8 @@ Ext.define('ExtWeather.view.main.MainModel', {
 
     alias: 'viewmodel.main',
 
+    id: 'mainViewModel',
+
     store: {
         type: 'current'
     },
@@ -22,5 +24,7 @@ Ext.define('ExtWeather.view.main.MainModel', {
         homeText: '<h2>Ext Weather App</h2> <br /> <p>App is gathering the data from the OpenWeather API.</p>',
 
         openWeatherLogo: '<img src="./resources/openweather-transparent-logo-RGB.png"></img>',
+
+        weatherBanner: '<img src="./resources/banner.jpg"></img>'
     }
 });

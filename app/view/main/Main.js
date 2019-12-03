@@ -108,7 +108,17 @@ Ext.define('ExtWeather.view.main.Main', {
                 layout: 'auto',
                 items: [
                     { 
-                        xtype: 'forecastGrid'
+                        xtype: 'forecastGrid',
+                        height: 400,
+                        scrollable: true
+                    },
+                    {
+                        xtype: 'panel',
+                        height: 154,
+                        margin: 5,
+                        bind: {
+                            html: '{weatherBanner}'
+                        }
                     }
                 ]
             }
