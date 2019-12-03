@@ -79,6 +79,9 @@ Ext.define('ExtWeather.view.main.MainController', {
                 for(i = 0 ; i < forecastsArray.length; i ++){
                     let localDateTime = forecastsArray[i].data.dt_txt
                     console.log(localDateTime); // this value will be needed during formatting
+                    localDateTime = Ext.Date.parse(localDateTime);
+                    forecastsArray[i].data.dt_txt = localDateTime;
+                    console.log(localDateTime);
                 }
             }
         });
