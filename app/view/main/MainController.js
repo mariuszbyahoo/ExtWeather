@@ -71,20 +71,7 @@ Ext.define('ExtWeather.view.main.MainController', {
 
     onGridForecastSelected : async function (){
         let SpecificForecastGridStore = Ext.data.StoreManager.lookup('SpecificForecastGridStore')
-        SpecificForecastGridStore.load({
-            scope: this,
-            callback: function(){
-                let forecastsArray = SpecificForecastGridStore.data.items;
-                console.log('loaded SpecificForecastGridStore');
-                for(i = 0 ; i < forecastsArray.length; i ++){
-                    let localDateTime = forecastsArray[i].data.dt_txt
-                    console.log(localDateTime); // this value will be needed during formatting
-                    localDateTime = Ext.Date.parse(localDateTime);
-                    forecastsArray[i].data.dt_txt = localDateTime;
-                    console.log(localDateTime);
-                }
-            }
-        });
+        SpecificForecastGridStore.load();
     }
 });
 

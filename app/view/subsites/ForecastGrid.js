@@ -11,7 +11,9 @@ Ext.define('ExtWeather.view.subsites.ForecastGrid', {
         {
             text: 'DateTime',
             flex: 1,
-            dataIndex: 'dt_txt'
+            dataIndex: 'dt_txt',
+            dateFormat: 'd/M/y h:m',
+            renderer: Ext.util.Format.dateRenderer('D, d/m/Y H:i')
         },
         {
             text: 'Temperature',
@@ -26,7 +28,7 @@ Ext.define('ExtWeather.view.subsites.ForecastGrid', {
         {
             text: 'Humidity',
             flex: 1,
-            dataIndex: 'humidity'
+            dataIndex: 'humidity',
         }
     ]
 })

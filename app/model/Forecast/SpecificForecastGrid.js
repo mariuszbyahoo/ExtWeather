@@ -30,7 +30,8 @@ Ext.define('ExtWeather.model.Forecast.SpecificForecastGrid', {
             mappint: 'main.temp_kf'
         }, {
             name: 'dt_txt',
-            mapping: 'dt_txt'
+            mapping: 'dt_txt',
+            type: 'date' // ExtJs automatically converts strings to date if this line specified
         }
     ],
     proxy: {
