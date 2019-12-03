@@ -73,19 +73,6 @@ Ext.define('ExtWeather.view.main.MainController', {
         let SpecificForecastGridStore = Ext.data.StoreManager.lookup('SpecificForecastGridStore');
         SpecificForecastGridStore.load();
     },
-
-    afterPanelRender : function(cmp){ 
-        cmp.setHtml('changed!');
-    },
-
-    collapseRowBody : function(rowNode, record, expandRow, eOpts) {
-        cmp.setHtml('collapsed!');
-        console.log('collapsed!');
-        console.log(rowNode);
-        console.log(record);
-        console.log(expandRow);
-        console.log(eOpts);
-    }
 });
 
 async function populateBasicWeatherGrid(input, vm) {
