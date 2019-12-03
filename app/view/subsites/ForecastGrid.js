@@ -8,6 +8,7 @@ Ext.define('ExtWeather.view.subsites.ForecastGrid', {
         model: 'ExtWeather.model.Forecast.SpecificForecastGrid',
         autoLoad: true
     },
+
     columns:[
         {
             text: 'DateTime',
@@ -34,14 +35,34 @@ Ext.define('ExtWeather.view.subsites.ForecastGrid', {
         }
     ],
 
-    plugins: [{
-        ptype: 'rowwidget',
-        widget: {
-            xtype: 'panel',
-            html: '<p>Loading</p>',
-            listeners:{
-                afterrender: 'afterPanelRender'
+
+    plugins: [
+        {
+            ptype: 'rowexpander',
+            rowBodyTpl: '<p>A tu jest rowBodyTpl</p>',
+            rowexpander: true,
+            listeners: {
+                afterrender: 'afterPanelRender',
+                collapsebody: 'collapseRowBody'
             }
         }
-    }]
+    ],
+    
+    itemConfig: {
+        body: {
+            tpl: '<p>A tu jest body</p>',
+
+        },
+    }
 })
+
+    // Tamten z kolei w ogóle nie odpala swoich eventów w ogóle nie wiadomo czemu...
+        // {
+        // ptype: 'rowwidget',
+        // widget: {
+        //     xtype: 'panel',
+        //     listeners:{
+        //         afterrender: 'afterPanelRender',
+        //         collapsebody: 'collapseRowBody'
+        //     }
+        // }
