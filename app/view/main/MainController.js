@@ -72,6 +72,10 @@ Ext.define('ExtWeather.view.main.MainController', {
     onGridForecastSelected : async function (){
         let SpecificForecastGridStore = Ext.data.StoreManager.lookup('SpecificForecastGridStore')
         SpecificForecastGridStore.load();
+    },
+
+    afterPanelRender: function(cmp){
+        cmp.setHtml('Loaded already!');
     }
 });
 

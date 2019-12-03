@@ -2,6 +2,7 @@ Ext.define('ExtWeather.view.subsites.ForecastGrid', {
     extend: 'Ext.grid.Panel',
     xtype: 'forecastGrid',
     title: '5 day forecast',
+    id: 'forecastGrid',
     store: {
         storeId: 'SpecificForecastGridStore',
         model: 'ExtWeather.model.Forecast.SpecificForecastGrid',
@@ -17,6 +18,7 @@ Ext.define('ExtWeather.view.subsites.ForecastGrid', {
         },
         {
             text: 'Temperature',
+            id: 'tempField',
             flex: 1,
             dataIndex: 'temp'
         },
@@ -36,10 +38,9 @@ Ext.define('ExtWeather.view.subsites.ForecastGrid', {
         ptype: 'rowwidget',
         widget: {
             xtype: 'panel',
-            name: 'image',
-            html: '<p>Loading image...</p>',
-            beforeRender: function(){
-                this.update('Loaded!!!'); // How to do that while init comp change hmtl??
+            html: '<p>Loading</p>',
+            listeners:{
+                afterrender: 'afterPanelRender'
             }
         }
     }]
