@@ -25,6 +25,6 @@ Ext.define('ExtWeather.view.main.MainModel', {
 
         openWeatherLogo: '<img src="./resources/openweather-transparent-logo-RGB.png"></img>',
 
-        weatherBanner: '<img src="./resources/banner.jpg" align="right"></img>'
+        weatherBanner: '<img src="./resources/banner.jpg" ></img>'
     }
 });
