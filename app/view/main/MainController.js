@@ -75,6 +75,9 @@ Ext.define('ExtWeather.view.main.MainController', {
     },
 });
 
+// PONIŻSZE FUNKCJE DO POPRAWY:
+
+
 async function populateBasicWeatherGrid(input, vm) {
     let store = Ext.data.StoreManager.lookup('current');
     store.getProxy().getReader().setRootProperty('main');
