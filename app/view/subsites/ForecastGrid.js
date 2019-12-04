@@ -39,8 +39,8 @@ Ext.define('ExtWeather.view.subsites.ForecastGrid', {
         {
             ptype: 'rowexpander',
             rowBodyTpl: [
-                '<tpl for=".">', // weź desc dla każdego $ i wsadź w rowExp.
-                   "<p> {[console.log(Ext.data.StoreManager.get('SpecificForecastGridStore').data.items[0].data)]}</p>",
+                '<tpl for=".">', 
+                   "Today we will have: <b>{description}</b>", // Te klamry się odnoszą do Storage!
                 '</tpl>'
             ],
             rowexpander: true,
@@ -51,3 +51,4 @@ Ext.define('ExtWeather.view.subsites.ForecastGrid', {
         }
     ]
 })
+/*{[console.log(Ext.data.StoreManager.get('SpecificForecastGridStore').data.items[0].data)]} */
