@@ -11,8 +11,20 @@ Ext.define('ExtWeather.model.Forecast.SpecificForecastGrid', {
             name: 'temp_min',
             mapping: 'main.temp_min',
         }, {
+            name: 'temp_min_c',
+            mapping: 'main.temp_min',
+            convert: function(kelvin){
+                return''+((Math.round(kelvin - 273.15) * 100) / 100) + ' &#8451';
+            }
+        }, {
             name: 'temp_max',
             mapping: 'main.temp_max',
+        }, {
+            name: 'temp_max_c',
+            mapping: 'main.temp_max',
+            convert: function(kelvin){
+                return ''+((Math.round(kelvin - 273.15) * 100) / 100) + '  &#8451';
+            }
         }, {
             name: 'pressure',
             mapping: 'main.pressure'
