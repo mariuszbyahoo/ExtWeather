@@ -40,8 +40,20 @@ Ext.define('ExtWeather.view.subsites.ForecastGrid', {
             ptype: 'rowexpander',
             rowBodyTpl: [
                 '<tpl for=".">', // Ten for to potrzebny, bez tego nie dorwie storage'u root'a
-                   "We will have: <b>{description}</b>", // Te klamry się odnoszą do Storage!
-                   "<br />Wind will blow at: <b>{wind_deg}\u00B0</b> with velocity of: <b>{wind_speed}</b> km/h",
+                    "<p>We will have: <b>{description}</b></p>", // Te klamry się odnoszą do Storage!
+                    "<p>Minimal Temperature : <b id='min'>{temp_min}</b></p>",
+                    "<p>Maximal Temperature : <b>{temp_max}</b></p>",
+                    "<br />Wind will blow at: <b>{wind_deg}\u00B0</b> with velocity of: <b>{wind_speed}</b> km/h",
+                    // CONDITIONAL:
+                    '<tpl if="temp &lt;=273.15">',
+                        '<p>Winter</p>',
+                    '<tpl elseif="temp &gt;=273.15 &amp;&amp; temp &lt;=278.15">', // zmienne z root'a są osiągalne tu jako nazwa zmiennej.
+                        '<p>Autumn</p>',
+                    '<tpl elseif="temp &gt;278.15 &amp;&amp; temp &lt;=288.15">',
+                        '<p>Spring</p>',
+                    '<tpl elseif="temp &gt;278.15">',    
+                        '<p>Summer</p>',
+                    '</tpl>',         
                 '</tpl>'
             ],
             rowexpander: true,
