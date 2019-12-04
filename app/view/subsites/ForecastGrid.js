@@ -65,7 +65,7 @@ Ext.define('ExtWeather.view.subsites.ForecastGrid', {
                     "<p>We will have: <b>{description}</b></p>", // Te klamry się odnoszą do Storage!
                     "<p>Minimal Temperature : <b id='min'>{temp_min_c}</b></p>",
                     "<p>Maximal Temperature : <b>{temp_max_c}</b></p>",
-                    "<br />Wind will blow at: <b>{wind_deg}\u00B0</b> with velocity of: <b>{wind_speed}</b> km/h",         
+                    "<br />Wind will blow to <b>{wind_deg}</b>, with velocity of: <b>{wind_speed}</b> km/h",         
                 '</tpl>'
             ],
             rowexpander: true,

@@ -46,7 +46,18 @@ Ext.define('ExtWeather.model.Forecast.SpecificForecastGrid', {
             type: 'date' // ExtJs automatically converts strings to date if this line specified
         }, {
             name: 'wind_deg',
-            mapping: 'wind.deg'
+            mapping: 'wind.deg',
+            convert: function(deg){ // a może by tak zrobić tu kompas i by przeszło jakoś bez problemu?
+                if(deg > 345 || deg <= 15)  {return 'North'}
+                else if(deg > 145 || deg <= 75)  {return 'North - East'}
+                else if(deg > 75 || deg <= 105)  {return 'East'}
+                else if(deg > 105 || deg <= 165) {return 'South - East'}
+                else if(deg > 165 || deg <= 195) {return 'South'}
+                else if(deg > 195 || deg <= 255) {return 'South - West'}
+                else if(deg > 255 || deg <= 285) {return 'West'}
+                else if(deg > 285 || deg <= 345) {return 'North - West'}
+                else{ return 'Undefined'}
+            }
         }, {
             name: 'wind_speed',
             mapping: 'wind.speed'
