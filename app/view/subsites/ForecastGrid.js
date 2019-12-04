@@ -39,8 +39,10 @@ Ext.define('ExtWeather.view.subsites.ForecastGrid', {
         {
             ptype: 'rowexpander',
             rowBodyTpl: [
-                    '{temp}'
-            ],  
+                '<tpl for=".">', // weź desc dla każdego $ i wsadź w rowExp.
+                   "<p> {[console.log(Ext.data.StoreManager.get('SpecificForecastGridStore').data.items[0].data)]}</p>",
+                '</tpl>'
+            ],
             rowexpander: true,
             listeners: {
                 afterrender: 'afterPanelRender',
