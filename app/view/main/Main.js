@@ -109,7 +109,7 @@ Ext.define('ExtWeather.view.main.Main', {
                 items: [
                     { 
                         xtype: 'forecastGrid',
-                        height: 400,
+                        height: 450,
                         scrollable: true
                     },
                     {
