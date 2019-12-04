@@ -39,8 +39,9 @@ Ext.define('ExtWeather.view.subsites.ForecastGrid', {
         {
             ptype: 'rowexpander',
             rowBodyTpl: [
-                '<tpl for=".">', 
-                   "Today we will have: <b>{description}</b>", // Te klamry się odnoszą do Storage!
+                '<tpl for=".">', // Ten for to potrzebny, bez tego nie dorwie storage'u root'a
+                   "We will have: <b>{description}</b>", // Te klamry się odnoszą do Storage!
+                   "<br />Wind will blow at: <b>{wind_deg}\u00B0</b> with velocity of: <b>{wind_speed}</b> km/h",
                 '</tpl>'
             ],
             rowexpander: true,

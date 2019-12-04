@@ -36,7 +36,7 @@ Ext.define('ExtWeather.model.Forecast.SpecificForecastGrid', {
             name: 'wind_deg',
             mapping: 'wind.deg'
         }, {
-            name: 'sind_speed',
+            name: 'wind_speed',
             mapping: 'wind.speed'
         }, {
             name: 'description',
