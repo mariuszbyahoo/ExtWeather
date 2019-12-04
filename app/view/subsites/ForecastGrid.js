@@ -21,17 +21,26 @@ Ext.define('ExtWeather.view.subsites.ForecastGrid', {
             text: 'Temperature',
             id: 'tempField',
             flex: 1,
-            dataIndex: 'temp'
+            dataIndex: 'temp',
+            renderer: function(kelvin){
+                return ((Math.round(kelvin - 273.15) * 100) / 100) + ' &#8451';
+            }
         },
         {
             text: 'Pressure',
             flex: 1,
-            dataIndex: 'pressure'
+            dataIndex: 'pressure',
+            renderer: function(val){
+                return val + ' hPa';
+            }
         },
         {
             text: 'Humidity',
             flex: 1,
             dataIndex: 'humidity',
+            renderer: function(val){
+                return val + ' %';
+            }
         }
     ],
 

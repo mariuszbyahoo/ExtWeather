@@ -6,13 +6,13 @@ Ext.define('ExtWeather.model.Forecast.SpecificForecastGrid', {
     fields: [
         {
             name: 'temp',
-            mapping: 'main.temp'
+            mapping: 'main.temp',
         }, {
             name: 'temp_min',
-            mapping: 'main.temp_min'
+            mapping: 'main.temp_min',
         }, {
             name: 'temp_max',
-            mapping: 'main.temp_max'
+            mapping: 'main.temp_max',
         }, {
             name: 'pressure',
             mapping: 'main.pressure'
@@ -27,7 +27,7 @@ Ext.define('ExtWeather.model.Forecast.SpecificForecastGrid', {
             mapping: 'main.humidity'
         }, {
             name: 'temp_kf',
-            mappint: 'main.temp_kf'
+            mapping: 'main.temp_kf'
         }, {
             name: 'dt_txt',
             mapping: 'dt_txt',
