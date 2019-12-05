@@ -24,18 +24,74 @@ Ext.define('ExtWeather.view.main.MainController', {
         // using regex for check does input containing only letters (at the beggining)
         let regex = /^[A-Za-z]/; 
         let matches = regex.test(input);
+        let vm = this.getViewModel();
 
         if (choice === 'ok' && matches) {
-            await populateBasicWeatherGrid(input, this.getViewModel()); // => 73
-            await populateOthersWeatherGrid(input, this.getViewModel()); // => 93
-        } else if (choice === 'ok' && !matches ){
-            Ext.Msg.alert('Weird chars found', 
-                "Write only letters in the city's name, use ONLY english characters" 
-                + " do not use any special characters.\n Try again!");
-        } else {
+        let store = Ext.data.StoreManager.lookup('current');
+        store.getProxy().getReader().setRootProperty('main');
+        let currentGrid = Ext.get('currentContent');
+        vm.set('query', input);
+        store.getProxy().url = 'https://api.openweathermap.org/data/2.5/weather?q=' +
+            vm.get('query') + '&appid=435b757eb1a5a697cbb51992ce5d7962';
+        
+        await store.load({
+            scope: this,
+            callback : function (records, operation, success) {
+                if(success){
+                    let tempC = store.collect('temp')[0] - 273.15;
+                    let pressure = store.collect('pressure')[0];
+                    let humidity = store.collect('humidity')[0];
+                    let temp_min = store.collect('temp_min')[0];
+                    let temp_max = store.collect('temp_max')[0];
 
-        }
-    },
+                    tempC = Math.round(tempC * 100 ) / 100;
+                    let amplitude = Math.round((temp_max - temp_min) * 100) / 100;
+
+                    let data = "<div class='data'><p>Temperature: " + tempC + '\u2103' + "</p><p>Pressure: " 
+                        + pressure + " hPa </p>" + "<p>Humidity: " + humidity 
+                        + "%</p><p>Temperature Amplitude will reach: " + amplitude 
+                        + '\u2103' + "</p></div>";
+
+                    currentGrid.update(data);
+                } else {
+                    Ext.Msg.alert('404', "City not found in the API... Try again!");
+                }
+            }
+        });
+
+        let windStore = Ext.data.StoreManager.lookup('wind');
+        vm.set('query', input);
+        windStore.getProxy().url = 'https://api.openweathermap.org/data/2.5/weather?q=' +
+            vm.get('query') + '&appid=435b757eb1a5a697cbb51992ce5d7962';
+        let windGrid = Ext.get('windContent');
+
+        await windStore.load({
+            scope: this,
+            callback : async function(records, operation, success) {
+                if(success){
+                    if(windStore.collect('deg').length != 0) var deg = windStore.collect('deg') + '\u00B0';
+                    else var deg = null; 
+                    if(windStore.collect('speed').length != 0) var speed = windStore.collect('speed') + 'km/h';
+                    else var speed = null;
+                    let data = "";
+                    if(deg != null) data += "<p>Wind blows in degree : " + deg + "</p>";
+                    if(speed != null) data += "<p>Wind Speed: " + speed + " km/h </p>"; 
+                    windGrid.update(data);
+                    await populateCloudsDiv(input, vm); // => 125
+                    await populateTitle(input, vm); // => 164
+                }else {
+                    console.log('City not found');
+                }   
+            }   
+        }); 
+    } else if (choice === 'ok' && !matches ){
+        Ext.Msg.alert('Weird chars found', 
+            "Write only letters in the city's name, use ONLY english characters" 
+            + " do not use any special characters.\n Try again!");
+    } else {
+        Ext.Msg.alert('404', "City not found in the API... Try again!");
+    }        
+},
     onSubmitForecast: async function (choice, input) {
         // using regex for check does input containing only letters (at the beggining)
         let regex = /^[A-Za-z]/; 
@@ -76,71 +132,6 @@ Ext.define('ExtWeather.view.main.MainController', {
 });
 
 // PONIŻSZE FUNKCJE DO POPRAWY:
-
-
-async function populateBasicWeatherGrid(input, vm) {
-    let store = Ext.data.StoreManager.lookup('current');
-    store.getProxy().getReader().setRootProperty('main');
-    let currentGrid = Ext.get('currentContent');
-    vm.set('query', input);
-    store.getProxy().url = 'https://api.openweathermap.org/data/2.5/weather?q=' +
-        vm.get('query') + '&appid=435b757eb1a5a697cbb51992ce5d7962';
-     
-    await store.load({
-        scope: this,
-        callback : function (records, operation, success) {
-            if(success){
-                let tempC = store.collect('temp')[0] - 273.15;
-                let pressure = store.collect('pressure')[0];
-                let humidity = store.collect('humidity')[0];
-                let temp_min = store.collect('temp_min')[0];
-                let temp_max = store.collect('temp_max')[0];
-
-                tempC = Math.round(tempC * 100 ) / 100;
-                let amplitude = Math.round((temp_max - temp_min) * 100) / 100;
-
-                let data = "<div class='data'><p>Temperature: " + tempC + '\u2103' + "</p><p>Pressure: " 
-                    + pressure + " hPa </p>" + "<p>Humidity: " + humidity 
-                    + "%</p><p>Temperature Amplitude will reach: " + amplitude 
-                    + '\u2103' + "</p></div>";
-
-                currentGrid.update(data);
-            } else {
-                Ext.Msg.alert('404', "City not found in the API... Try again!");
-            }
-        }
-    });
-}
-
-async function populateOthersWeatherGrid(input, vm) {
-    
-        let store = Ext.data.StoreManager.lookup('wind');
-            
-        vm.set('query', input);
-        store.getProxy().url = 'https://api.openweathermap.org/data/2.5/weather?q=' +
-            vm.get('query') + '&appid=435b757eb1a5a697cbb51992ce5d7962';
-        let windGrid = Ext.get('windContent');
-
-        await store.load({
-            scope: this,
-            callback : async function(records, operation, success) {
-            if(success){
-                if(store.collect('deg').length != 0) var deg = store.collect('deg') + '\u00B0';
-                else var deg = null; 
-                if(store.collect('speed').length != 0) var speed = store.collect('speed') + 'km/h';
-                else var speed = null;
-                let data = "";
-                if(deg != null) data += "<p>Wind blows in degree : " + deg + "</p>";
-                if(speed != null) data += "<p>Wind Speed: " + speed + " km/h </p>"; 
-                windGrid.update(data);
-                await populateCloudsDiv(input, vm); // => 125
-                await populateTitle(input, vm); // => 164
-            }else {
-                console.log('City not found');
-            }   
-        }
-    }); 
-}
 
 async function populateCloudsDiv(input, vm){
     let store = Ext.data.StoreManager.lookup('clouds');
