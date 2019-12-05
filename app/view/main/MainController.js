@@ -88,71 +88,114 @@ Ext.define('ExtWeather.view.main.MainController', {
         let vm = this.getViewModel();
 
         if (choice === 'ok' && matches) {
-        let store = Ext.data.StoreManager.lookup('current');
-        store.getProxy().getReader().setRootProperty('main');
-        let currentGrid = Ext.get('currentContent');
-        vm.set('query', input);
-        store.getProxy().url = 'https://api.openweathermap.org/data/2.5/weather?q=' +
-            vm.get('query') + '&appid=435b757eb1a5a697cbb51992ce5d7962';
-        
-        await store.load({
-            scope: this,
-            callback : function (records, operation, success) {
-                if(success){
-                    let tempC = store.collect('temp')[0] - 273.15;
-                    let pressure = store.collect('pressure')[0];
-                    let humidity = store.collect('humidity')[0];
-                    let temp_min = store.collect('temp_min')[0];
-                    let temp_max = store.collect('temp_max')[0];
+            let store = Ext.data.StoreManager.lookup('current');
+            store.getProxy().getReader().setRootProperty('main');
+            let currentGrid = Ext.get('currentContent');
+            vm.set('query', input);
+            store.getProxy().url = 'https://api.openweathermap.org/data/2.5/weather?q=' +
+                vm.get('query') + '&appid=435b757eb1a5a697cbb51992ce5d7962';
+            
+            await store.load({
+                scope: this,
+                callback : function (records, operation, success) {
+                    if(success){
+                        let tempC = store.collect('temp')[0] - 273.15;
+                        let pressure = store.collect('pressure')[0];
+                        let humidity = store.collect('humidity')[0];
+                        let temp_min = store.collect('temp_min')[0];
+                        let temp_max = store.collect('temp_max')[0];
 
-                    tempC = Math.round(tempC * 100 ) / 100;
-                    let amplitude = Math.round((temp_max - temp_min) * 100) / 100;
+                        tempC = Math.round(tempC * 100 ) / 100;
+                        let amplitude = Math.round((temp_max - temp_min) * 100) / 100;
 
-                    let data = "<div class='data'><p>Temperature: " + tempC + '\u2103' + "</p><p>Pressure: " 
-                        + pressure + " hPa </p>" + "<p>Humidity: " + humidity 
-                        + "%</p><p>Temperature Amplitude will reach: " + amplitude 
-                        + '\u2103' + "</p></div>";
+                        let data = "<div class='data'><p>Temperature: " + tempC + '\u2103' + "</p><p>Pressure: " 
+                            + pressure + " hPa </p>" + "<p>Humidity: " + humidity 
+                            + "%</p><p>Temperature Amplitude will reach: " + amplitude 
+                            + '\u2103' + "</p></div>";
 
-                    currentGrid.update(data);
-                } else {
-                    Ext.Msg.alert('404', "City not found in the API... Try again!");
+                        currentGrid.update(data);
+                    } else {
+                        Ext.Msg.alert('404', "City not found in the API... Try again!");
+                    }
                 }
-            }
-        });
+            });
 
-        let windStore = Ext.data.StoreManager.lookup('wind');
-        vm.set('query', input);
-        windStore.getProxy().url = 'https://api.openweathermap.org/data/2.5/weather?q=' +
-            vm.get('query') + '&appid=435b757eb1a5a697cbb51992ce5d7962';
-        let windGrid = Ext.get('windContent');
+            let windStore = Ext.data.StoreManager.lookup('wind');
+            vm.set('query', input);
+            windStore.getProxy().url = 'https://api.openweathermap.org/data/2.5/weather?q=' +
+                vm.get('query') + '&appid=435b757eb1a5a697cbb51992ce5d7962';
+            let windGrid = Ext.get('windContent');
 
-        await windStore.load({
-            scope: this,
-            callback : async function(records, operation, success) {
-                if(success){
-                    if(windStore.collect('deg').length != 0) var deg = windStore.collect('deg') + '\u00B0';
-                    else var deg = null; 
-                    if(windStore.collect('speed').length != 0) var speed = windStore.collect('speed') + 'km/h';
-                    else var speed = null;
-                    let data = "";
-                    if(deg != null) data += "<p>Wind blows in degree : " + deg + "</p>";
-                    if(speed != null) data += "<p>Wind Speed: " + speed + " km/h </p>"; 
-                    windGrid.update(data);
-                    await populateCloudsDiv(input, vm); // => 125
-                    await populateTitle(input, vm); // => 164
-                }else {
-                    console.log('City not found');
+            await windStore.load({
+                scope: this,
+                callback : async function(records, operation, success) {
+                    if(success){
+                        if(windStore.collect('deg').length != 0) var deg = windStore.collect('deg') + '\u00B0';
+                        else var deg = null; 
+                        if(windStore.collect('speed').length != 0) var speed = windStore.collect('speed') + 'km/h';
+                        else var speed = null;
+                        let data = "";
+                        if(deg != null) data += "<p>Wind blows in degree : " + deg + "</p>";
+                        if(speed != null) data += "<p>Wind Speed: " + speed + " km/h </p>"; 
+                        windGrid.update(data);
+                        let cloudStore = Ext.data.StoreManager.lookup('clouds');
+                        let cloudsGrid = Ext.get('cloudsContent');
+                    
+                        vm.set('query', input);
+                        cloudStore.getProxy().url = 'https://api.openweathermap.org/data/2.5/weather?q=' +
+                            vm.get('query') + '&appid=435b757eb1a5a697cbb51992ce5d7962';
+                        await cloudStore.load({
+                            scope: this,
+                            callback: async function () {
+                                let clouds = cloudStore.collect('description')[0];
+                                let data = "<div class='data'><p>Overall description: "+ clouds +"</p></div>";
+                                cloudsGrid.update(data)
+                                let visibilityStore = Ext.data.StoreManager.lookup('rootInfo');
+                                let visibilityGrid = Ext.get('visibilityContent');
+
+                                vm.set('query', input);
+                                visibilityStore.getProxy().url = 'https://api.openweathermap.org/data/2.5/weather?q=' +
+                                    vm.get('query') + '&appid=435b757eb1a5a697cbb51992ce5d7962';
+                                await visibilityStore.load({
+                                    scope: this,
+                                    callback: function () {
+                                        let visibility = visibilityStore.collect('visibility')[0];
+                                        if(visibility){
+                                            let data = "<div class='data'><p>Visibility: "+ visibility +" meters</p></div>";
+                                            visibilityGrid.update(data);
+                                        } else {
+                                            visibilityGrid.update('<p></p>');
+                                        }
+                                    }
+                                });
+                            }
+                        });
+                        let rootStore = Ext.data.StoreManager.lookup('rootInfo');
+                        vm.set('query', input);
+                        rootStore.getProxy().url = 'https://api.openweathermap.org/data/2.5/weather?q=' +
+                            vm.get('query') + '&appid=435b757eb1a5a697cbb51992ce5d7962';
+                        await rootStore.load({
+                            scope: this,
+                            callback: function () {
+                                let title = rootStore.collect('name')[0];
+                                Ext.ComponentManager.get('currentRootPanel').setTitle('Weather in ' + title); 
+                                Ext.ComponentManager.get('currentRootPanel').setTitleAlign('center'); 
+                                }
+                            });
+                    }else {
+                        console.log('City not found');
+                    }   
                 }   
-            }   
-        }); 
-    } else if (choice === 'ok' && !matches ){
-        Ext.Msg.alert('Weird chars found', 
-            "Write only letters in the city's name, use ONLY english characters" 
-            + " do not use any special characters.\n Try again!");
-    } else {
-        Ext.Msg.alert('404', "City not found in the API... Try again!");
-    }        
-},
+            }); 
+        } else if (choice === 'ok' && !matches ){
+            Ext.Msg.alert('Weird chars found', 
+                "Write only letters in the city's name, use ONLY english characters" 
+                + " do not use any special characters.\n Try again!");
+        } else {
+            Ext.Msg.alert('404', "City not found in the API... Try again!");
+        }        
+    },
+
     onSubmitForecast: async function (choice, input) {
         // using regex for check does input containing only letters (at the beggining)
         let regex = /^[A-Za-z]/; 
@@ -170,7 +213,68 @@ Ext.define('ExtWeather.view.main.MainController', {
                 scope: this,
                 callback: async function(records, operation, success) {
                     if(success){
-                        await createPanels(input, vm, store); // => 194
+                        let mainPanel = Ext.ComponentManager.get('forecastMainPanel'); 
+                        let forecastsCount = counterStore.count();
+                    
+                        if(vm.get('areForecastsPopulated') == true) mainPanel.removeAll(true);
+                    
+                        for(let i = 0 ; i < forecastsCount ; i++) {
+                            let specificForecastDataStore = new ExtWeather.store.Forecast.SpecificForecast(); 
+                                //creating a new store because of the asynchronousness
+                                // Change the store's URL and get the data.
+                            specificForecastDataStore.getProxy().getReader().setRootProperty('list['+ i +'].main');
+                            vm.set('query', input);
+                            specificForecastDataStore.getProxy().url = 'https://api.openweathermap.org/data/2.5/forecast?q=' +
+                                vm.get('query') + '&appid=435b757eb1a5a697cbb51992ce5d7962';
+                            await specificForecastDataStore.load({ 
+                                scope: this,
+                                callback : async function (records, operation, success) {
+                                    if(success){
+                    
+                                       let currentPanel = new Ext.panel.Panel({
+                                           xtype: 'specificForecastPanel', // adding this will make destroying easier
+                                           titleAlign: 'center'
+                                       });
+                    
+                                       // Cannot set it nicely, (title first) because of that the status of store's call will be 
+                                       // unknown at the beginning, must be in specificForecastDataStore.load()'s callback
+                                        if(i === 0){ // Setting the Main panel's title:
+                                            let forecastCityStore = Ext.data.StoreManager.lookup('forecastCity');
+                                            forecastCityStore.getProxy().url = specificForecastDataStore.getProxy().url;
+                                            await forecastCityStore.load({
+                                                scope: this,
+                                                callback: async function (records, operation, success){
+                                                    if(success){
+                                                        Ext.ComponentManager.get('forecastMainPanel').
+                                                            setTitle('Weather Forecast for: ' + forecastCityStore.collect('name'));
+                                                    }
+                                                }
+                                            });
+                                        }
+                    
+                                        let tempC = specificForecastDataStore.collect('temp')[0] - 273.15;
+                                        let pressure = specificForecastDataStore.collect('pressure')[0];
+                                        let humidity = specificForecastDataStore.collect('humidity')[0];
+                    
+                                        tempC = Math.round(tempC * 100 ) / 100;
+                    
+                                        // and create a panel in ForecastMainPanel with them
+                                        let data = "<div class='data'><p>Temperature: " + tempC + '\u2103' + "</p><p>Pressure: " 
+                                            + pressure + " hPa </p>" + "<p>Humidity: " + humidity + "</p></div>";
+                    
+                                        currentPanel.update(data); 
+                    
+                                        currentPanel.setTitle(counterStore.collect('dt_txt')[i]);
+                                        mainPanel.insert(i, currentPanel); 
+                                        mainPanel.updateLayout();
+                                        vm.set('areForecastsPopulated', true);
+                                    } else {
+                                        Ext.Msg.alert('404', "City not found in the API... Try again!");
+                                    }
+                                }
+                            });
+                        };                        
+                        //await createPanels(input, vm, store); // => 194
                     } else {
                         Ext.Msg.alert('404', "City not found in the API... Try again!");
                     }
@@ -191,125 +295,3 @@ Ext.define('ExtWeather.view.main.MainController', {
         SpecificForecastGridStore.load();
     },
 });
-
-// PONIŻSZE FUNKCJE DO POPRAWY:
-
-async function populateCloudsDiv(input, vm){
-    let store = Ext.data.StoreManager.lookup('clouds');
-    let cloudsGrid = Ext.get('cloudsContent');
-
-    vm.set('query', input);
-    store.getProxy().url = 'https://api.openweathermap.org/data/2.5/weather?q=' +
-        vm.get('query') + '&appid=435b757eb1a5a697cbb51992ce5d7962';
-    await store.load({
-        scope: this,
-        callback: function () {
-            let clouds = store.collect('description')[0];
-            let data = "<div class='data'><p>Overall description: "+ clouds +"</p></div>";
-            cloudsGrid.update(data)
-            populateVisibilityDiv(input, vm); // => 143
-        }
-    });
-}
-
-async function populateVisibilityDiv(input, vm) {
-    let store = Ext.data.StoreManager.lookup('rootInfo');
-    let visibilityGrid = Ext.get('visibilityContent');
-
-    vm.set('query', input);
-    store.getProxy().url = 'https://api.openweathermap.org/data/2.5/weather?q=' +
-        vm.get('query') + '&appid=435b757eb1a5a697cbb51992ce5d7962';
-    await store.load({
-        scope: this,
-        callback: function () {
-            let visibility = store.collect('visibility')[0];
-            if(visibility){
-                let data = "<div class='data'><p>Visibility: "+ visibility +" meters</p></div>";
-                visibilityGrid.update(data);
-            } else {
-                visibilityGrid.update('<p></p>');
-            }
-        }
-    });
-}
-
-async function populateTitle(input, vm){
-    let store = Ext.data.StoreManager.lookup('rootInfo');
-    vm.set('query', input);
-    store.getProxy().url = 'https://api.openweathermap.org/data/2.5/weather?q=' +
-        vm.get('query') + '&appid=435b757eb1a5a697cbb51992ce5d7962';
-    await store.load({
-        scope: this,
-        callback: function () {
-        let title = store.collect('name')[0];
-        Ext.ComponentManager.get('currentRootPanel').setTitle('Weather in ' + title); 
-        Ext.ComponentManager.get('currentRootPanel').setTitleAlign('center'); 
-        }
-    });
-}
-
-//  FORECAST FUNCTIONS:
-
-async function createPanels(input, vm, counterStore){
-    let mainPanel = Ext.ComponentManager.get('forecastMainPanel'); 
-    let forecastsCount = counterStore.count();
-
-    if(vm.get('areForecastsPopulated') == true) mainPanel.removeAll(true);
-
-    for(let i = 0 ; i < forecastsCount ; i++) {
-        let specificForecastDataStore = new ExtWeather.store.Forecast.SpecificForecast(); 
-            //creating a new store because of the asynchronousness
-            // Change the store's URL and get the data.
-        specificForecastDataStore.getProxy().getReader().setRootProperty('list['+ i +'].main');
-        vm.set('query', input);
-        specificForecastDataStore.getProxy().url = 'https://api.openweathermap.org/data/2.5/forecast?q=' +
-            vm.get('query') + '&appid=435b757eb1a5a697cbb51992ce5d7962';
-        await specificForecastDataStore.load({ 
-            scope: this,
-            callback : async function (records, operation, success) {
-                if(success){
-
-                   let currentPanel = new Ext.panel.Panel({
-                       xtype: 'specificForecastPanel', // adding this will make destroying easier
-                       titleAlign: 'center'
-                   });
-
-                   // Cannot set it nicely, (title first) because of that the status of store's call will be 
-                   // unknown at the beginning, must be in specificForecastDataStore.load()'s callback
-                    if(i === 0){ // Setting the Main panel's title:
-                        let forecastCityStore = Ext.data.StoreManager.lookup('forecastCity');
-                        forecastCityStore.getProxy().url = specificForecastDataStore.getProxy().url;
-                        await forecastCityStore.load({
-                            scope: this,
-                            callback: async function (records, operation, success){
-                                if(success){
-                                    Ext.ComponentManager.get('forecastMainPanel').
-                                        setTitle('Weather Forecast for: ' + forecastCityStore.collect('name'));
-                                }
-                            }
-                        });
-                    }
-
-                    let tempC = specificForecastDataStore.collect('temp')[0] - 273.15;
-                    let pressure = specificForecastDataStore.collect('pressure')[0];
-                    let humidity = specificForecastDataStore.collect('humidity')[0];
-
-                    tempC = Math.round(tempC * 100 ) / 100;
-
-                    // and create a panel in ForecastMainPanel with them
-                    let data = "<div class='data'><p>Temperature: " + tempC + '\u2103' + "</p><p>Pressure: " 
-                        + pressure + " hPa </p>" + "<p>Humidity: " + humidity + "</p></div>";
-
-                    currentPanel.update(data); 
-
-                    currentPanel.setTitle(counterStore.collect('dt_txt')[i]);
-                    mainPanel.insert(i, currentPanel); 
-                    mainPanel.updateLayout();
-                    vm.set('areForecastsPopulated', true);
-                } else {
-                    Ext.Msg.alert('404', "City not found in the API... Try again!");
-                }
-            }
-        });
-    };
-}
