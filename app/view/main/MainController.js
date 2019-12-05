@@ -9,26 +9,53 @@ Ext.define('ExtWeather.view.main.MainController', {
     store: Ext.data.StoreManager.lookup('current'),
 
     logCsv: async function() {
+        let header = 'current_timestamp,lon,lat,weather,tempC,humidity,visibility,wind_speed,wind_deg,clouds\n';
+        let headerArray = header.split();
+        let csvBlob = new Blob(headerArray, {type: 'text/csv'});
+
         const vm = this.getViewModel();
         const xhr = new XMLHttpRequest();
         xhr.responseType = "json";
         xhr.addEventListener("load", function() {
             if (xhr.status === 200) {
-                console.log("Wynik połączenia:");
-                console.log(xhr.response);
-                console.log('******************************');
-                const items = xhr.response
-                const replacer = (key, value) => value === null ? '' : value // specify how you want to handle null values here
-                var fields = Object.keys(items)
-                let itemsArray = Array.from(items);
-                var csv = itemsArray.map(function(row){
-                    return fields.map(function(fieldName){
-                        return JSON.stringify(row[fieldName], replacer)
-                    }).join(',')
-                })
-                csv.unshift(fields.join(',')) // add header column
+                let json = xhr.response;
+                let arr = new Array();
 
-                console.log(csv.join('\r\n'))
+                // take the hrs:
+                let now = json["dt"]*1000; // get the current moment UNIX timestamp, counted in MiliSeconds
+                arr.push(now)
+
+                // take the coords:
+                let lon = json["coord"]["lon"];
+                arr.push(lon);
+                let lat = json["coord"]["lat"];
+                arr.push(lat);
+
+                // take the weather desc
+                let weather = json["weather"][0]["description"]; //
+                arr.push(weather);
+                // take the temperature
+                let temp = (Math.round(json["main"]["temp"] - 273.15) * 100) / 100; // Celsius
+                arr.push(temp);
+                // take the humidity
+                let humidity = json["main"]["humidity"]; // Percent
+                arr.push(humidity);
+                // take the visibility
+                let visibility = json["visibility"] / 1000; // Kilometers
+                arr.push(visibility);
+                // take the wind speed
+                let windSpeed = json["wind"]["speed"]; // km/h
+                arr.push(windSpeed);
+                // take the wind deg
+                let windDeg = json["wind"]["deg"]; // Azymut
+                arr.push(windDeg);
+                // take the clouds
+                let clouds = json["clouds"]["all"]; // String description
+                arr.push(clouds);
+
+                csvBlob += arr.join(',');
+                console.log(csvBlob);
+
             }
         });
         
