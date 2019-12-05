@@ -10,7 +10,7 @@ Ext.define('ExtWeather.view.subsites.CurrentWeather',{
     buttons: [
         {
             text: 'Load',
-            handler: 'onCurrentSelected'
+            handler: 'logCsv'
         }
     ],
 

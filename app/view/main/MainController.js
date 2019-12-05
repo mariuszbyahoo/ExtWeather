@@ -8,6 +8,40 @@ Ext.define('ExtWeather.view.main.MainController', {
 
     store: Ext.data.StoreManager.lookup('current'),
 
+    logCsv: async function() {
+        const vm = this.getViewModel();
+        const xhr = new XMLHttpRequest();
+        xhr.responseType = "json";
+        xhr.addEventListener("load", function() {
+            if (xhr.status === 200) {
+                console.log("Wynik połączenia:");
+                console.log(xhr.response);
+                console.log('******************************');
+                const items = xhr.response
+                const replacer = (key, value) => value === null ? '' : value // specify how you want to handle null values here
+                var fields = Object.keys(items)
+                let itemsArray = Array.from(items);
+                var csv = itemsArray.map(function(row){
+                    return fields.map(function(fieldName){
+                        return JSON.stringify(row[fieldName], replacer)
+                    }).join(',')
+                })
+                csv.unshift(fields.join(',')) // add header column
+
+                console.log(csv.join('\r\n'))
+            }
+        });
+        
+        xhr.addEventListener("error", function() {
+            alert("Niestety nie udało się nawiązać połączenia");
+        });
+        //typ połączenia, url, czy połączenie asynchroniczne
+        xhr.open("GET", 'https://api.openweathermap.org/data/2.5/weather?q='+vm.get('query')
+            +'&appid=435b757eb1a5a697cbb51992ce5d7962', true);
+
+        xhr.send();
+    },
+
     onCurrentSelected: async function () { // => 23
             Ext.Msg.prompt('Weather', 
             'Type an english name of the city, which you are looking weather for:', 
