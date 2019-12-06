@@ -20,7 +20,7 @@ Ext.define('ExtWeather.view.main.MainController', {
         function voivodeshipsWeatherInfoGen(cityName) {
             window.setInterval(logData, 6000); // 6s.
             async function logData() {
-                let header = 'city_name;timezone;current_timestamp;lon;lat;weather;tempC;humidity;visibility;wind_speed;wind_deg;clouds\n';
+                let header = '#city_name;timezone;current_timestamp;lon;lat;weather;tempC;humidity;visibility;wind_speed;wind_deg;clouds\n';
                 let record = '';
                 const xhr = new XMLHttpRequest();
                 xhr.responseType = "json";
@@ -30,7 +30,7 @@ Ext.define('ExtWeather.view.main.MainController', {
                         let arr = new Array();
 
                         // take the cityName:
-                        let cityName = json["name"];
+                        let cityName = '\"' + json["name"] + '\"';
                         arr.push(cityName);
 
                         // take the timezone:
@@ -48,7 +48,7 @@ Ext.define('ExtWeather.view.main.MainController', {
                         arr.push(lat);
 
                         // take the weather desc
-                        let weather = json["weather"][0]["description"]; // string
+                        let weather = '\"' + json["weather"][0]["description"] + '\"'; // string
                         arr.push(weather);
                         // take the temperature
                         let temp = (Math.round(json["main"]["temp"] - 273.15) * 100) / 100; // Celsius
