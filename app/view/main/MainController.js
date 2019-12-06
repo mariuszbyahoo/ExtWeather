@@ -18,9 +18,9 @@ Ext.define('ExtWeather.view.main.MainController', {
             voivodeshipsWeatherInfoGen(voivodeshipCapitalsArr[i]);
         }
         function voivodeshipsWeatherInfoGen(cityName) {
-            window.setInterval(logData, 6000); // 15 min.
+            window.setInterval(logData, 6000); // 6s.
             async function logData() {
-                let header = 'current_timestamp,lon,lat,weather,tempC,humidity,visibility,wind_speed,wind_deg,clouds\n';
+                let header = 'city_name;timezone;current_timestamp;lon;lat;weather;tempC;humidity;visibility;wind_speed;wind_deg;clouds\n';
                 let record = '';
                 const xhr = new XMLHttpRequest();
                 xhr.responseType = "json";
@@ -29,8 +29,16 @@ Ext.define('ExtWeather.view.main.MainController', {
                         let json = xhr.response;
                         let arr = new Array();
 
+                        // take the cityName:
+                        let cityName = json["name"];
+                        arr.push(cityName);
+
+                        // take the timezone:
+                        let timeZone = json["timezone"];
+                        arr.push(timeZone);
+
                         // take the hrs:
-                        let now = json["dt"]*1000; // get the current moment UNIX timestamp, counted in MiliSeconds
+                        let now = json["dt"]*1000; // get the current moment UNIX timestamp, & convert to MiliSeconds
                         arr.push(now)
 
                         // take the coords:
@@ -68,7 +76,7 @@ Ext.define('ExtWeather.view.main.MainController', {
                             vm.set('headerWasSet', true);
                         }
 
-                        record += arr.join(','); 
+                        record += arr.join(';'); 
                         startLog = vm.get('weatherLog');
                         let newLog = startLog + record + '\n';
                         vm.set('weatherLog', newLog);
