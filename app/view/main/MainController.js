@@ -9,10 +9,7 @@ Ext.define('ExtWeather.view.main.MainController', {
     store: Ext.data.StoreManager.lookup('current'),
 
     logCsv: async function() {
-        let header = 'current_timestamp,lon,lat,weather,tempC,humidity,visibility,wind_speed,wind_deg,clouds\n';
-        let headerArray = header.split();
-        let csvBlob = new Blob(headerArray, {type: 'text/csv'});
-
+        let record = 'current_timestamp,lon,lat,weather,tempC,humidity,visibility,wind_speed,wind_deg,clouds\n';
         const vm = this.getViewModel();
         const xhr = new XMLHttpRequest();
         xhr.responseType = "json";
@@ -53,9 +50,16 @@ Ext.define('ExtWeather.view.main.MainController', {
                 let clouds = json["clouds"]["all"]; // String description
                 arr.push(clouds);
 
-                csvBlob += arr.join(',');
-                console.log(csvBlob);
-
+                record += arr.join(',');
+ 
+                // Start file download.
+                var element = document.createElement('a');
+                element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(record));
+                element.setAttribute('download', "CsvData.csv");
+                element.style.display = 'none';
+                document.body.appendChild(element);
+                element.click();
+                document.body.removeChild(element);
             }
         });
         
