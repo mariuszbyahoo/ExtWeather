@@ -9,7 +9,8 @@ Ext.define('ExtWeather.view.main.MainController', {
     store: Ext.data.StoreManager.lookup('current'),
 
     logCsv: async function() {
-        let record = 'current_timestamp,lon,lat,weather,tempC,humidity,visibility,wind_speed,wind_deg,clouds\n';
+        let header = 'current_timestamp,lon,lat,weather,tempC,humidity,visibility,wind_speed,wind_deg,clouds\n';
+        let record = '';
         const vm = this.getViewModel();
         const xhr = new XMLHttpRequest();
         xhr.responseType = "json";
@@ -29,7 +30,7 @@ Ext.define('ExtWeather.view.main.MainController', {
                 arr.push(lat);
 
                 // take the weather desc
-                let weather = json["weather"][0]["description"]; //
+                let weather = json["weather"][0]["description"]; // string
                 arr.push(weather);
                 // take the temperature
                 let temp = (Math.round(json["main"]["temp"] - 273.15) * 100) / 100; // Celsius
@@ -38,7 +39,7 @@ Ext.define('ExtWeather.view.main.MainController', {
                 let humidity = json["main"]["humidity"]; // Percent
                 arr.push(humidity);
                 // take the visibility
-                let visibility = json["visibility"] / 1000; // Kilometers
+                let visibility = json["visibility"]; // Meters
                 arr.push(visibility);
                 // take the wind speed
                 let windSpeed = json["wind"]["speed"]; // km/h
@@ -47,30 +48,41 @@ Ext.define('ExtWeather.view.main.MainController', {
                 let windDeg = json["wind"]["deg"]; // Azymut
                 arr.push(windDeg);
                 // take the clouds
-                let clouds = json["clouds"]["all"]; // String description
+                let clouds = json["clouds"]["all"]; // Is this a percentage?
                 arr.push(clouds);
 
-                record += arr.join(',');
- 
-                // Start file download.
-                var element = document.createElement('a');
-                element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(record));
-                element.setAttribute('download', "CsvData.csv");
-                element.style.display = 'none';
-                document.body.appendChild(element);
-                element.click();
-                document.body.removeChild(element);
+                console.log(arr);
+
+                if(!vm.get('headerWasSet')){
+                    record = header;
+                    vm.set('headerWasSet', true);
+                }
+
+                record += arr.join(','); 
+                startLog = vm.get('weatherLog');
+                let newLog = startLog + record + '\n';
+                vm.set('weatherLog', newLog);
             }
         });
         
         xhr.addEventListener("error", function() {
             alert("Niestety nie udało się nawiązać połączenia");
         });
-        //typ połączenia, url, czy połączenie asynchroniczne
         xhr.open("GET", 'https://api.openweathermap.org/data/2.5/weather?q='+vm.get('query')
             +'&appid=435b757eb1a5a697cbb51992ce5d7962', true);
 
         xhr.send();
+    },
+
+    downloadCsvLog: function() {
+        let vm = this.getViewModel();
+        var element = document.createElement('a');
+        element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(vm.get('weatherLog')));
+        element.setAttribute('download', "CsvData.csv");
+        element.style.display = 'none';
+        document.body.appendChild(element);
+        element.click();
+        document.body.removeChild(element);        
     },
 
     onCurrentSelected: async function () { // => 23

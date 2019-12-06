@@ -9,8 +9,12 @@ Ext.define('ExtWeather.view.subsites.CurrentWeather',{
 
     buttons: [
         {
-            text: 'Load',
+            text: 'AppendCsv',
             handler: 'logCsv'
+        },
+        {
+            text: 'Download',
+            handler: 'downloadCsvLog'
         }
     ],
 

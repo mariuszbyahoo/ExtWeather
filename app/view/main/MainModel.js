@@ -19,6 +19,10 @@ Ext.define('ExtWeather.view.main.MainModel', {
 
         areForecastsPopulated: 'false',
 
+        headerWasSet: false,
+
+        weatherLog: '',
+
         startInfo: 'Fill in the form or press Load Data below to see some info',
 
         homeText: '<h2>Ext Weather App</h2> <br /> <p>App is gathering the data from the OpenWeather API.</p>',
