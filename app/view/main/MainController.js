@@ -9,69 +9,73 @@ Ext.define('ExtWeather.view.main.MainController', {
     store: Ext.data.StoreManager.lookup('current'),
 
     logCsv: async function() {
-        let header = 'current_timestamp,lon,lat,weather,tempC,humidity,visibility,wind_speed,wind_deg,clouds\n';
-        let record = '';
         const vm = this.getViewModel();
-        const xhr = new XMLHttpRequest();
-        xhr.responseType = "json";
-        xhr.addEventListener("load", function() {
-            if (xhr.status === 200) {
-                let json = xhr.response;
-                let arr = new Array();
+        window.setInterval(logData, 90000); // 15 min.
+        async function logData() {
+            let header = 'current_timestamp,lon,lat,weather,tempC,humidity,visibility,wind_speed,wind_deg,clouds\n';
+            let record = '';
+            const xhr = new XMLHttpRequest();
+            xhr.responseType = "json";
+            xhr.addEventListener("load", function() {
+                if (xhr.status === 200) {
+                    let json = xhr.response;
+                    let arr = new Array();
 
-                // take the hrs:
-                let now = json["dt"]*1000; // get the current moment UNIX timestamp, counted in MiliSeconds
-                arr.push(now)
+                    // take the hrs:
+                    let now = json["dt"]*1000; // get the current moment UNIX timestamp, counted in MiliSeconds
+                    arr.push(now)
 
-                // take the coords:
-                let lon = json["coord"]["lon"];
-                arr.push(lon);
-                let lat = json["coord"]["lat"];
-                arr.push(lat);
+                    // take the coords:
+                    let lon = json["coord"]["lon"];
+                    arr.push(lon);
+                    let lat = json["coord"]["lat"];
+                    arr.push(lat);
 
-                // take the weather desc
-                let weather = json["weather"][0]["description"]; // string
-                arr.push(weather);
-                // take the temperature
-                let temp = (Math.round(json["main"]["temp"] - 273.15) * 100) / 100; // Celsius
-                arr.push(temp);
-                // take the humidity
-                let humidity = json["main"]["humidity"]; // Percent
-                arr.push(humidity);
-                // take the visibility
-                let visibility = json["visibility"]; // Meters
-                arr.push(visibility);
-                // take the wind speed
-                let windSpeed = json["wind"]["speed"]; // km/h
-                arr.push(windSpeed);
-                // take the wind deg
-                let windDeg = json["wind"]["deg"]; // Azymut
-                arr.push(windDeg);
-                // take the clouds
-                let clouds = json["clouds"]["all"]; // Is this a percentage?
-                arr.push(clouds);
+                    // take the weather desc
+                    let weather = json["weather"][0]["description"]; // string
+                    arr.push(weather);
+                    // take the temperature
+                    let temp = (Math.round(json["main"]["temp"] - 273.15) * 100) / 100; // Celsius
+                    arr.push(temp);
+                    // take the humidity
+                    let humidity = json["main"]["humidity"]; // Percent
+                    arr.push(humidity);
+                    // take the visibility
+                    let visibility = json["visibility"]; // Meters
+                    arr.push(visibility);
+                    // take the wind speed
+                    let windSpeed = json["wind"]["speed"]; // km/h
+                    arr.push(windSpeed);
+                    // take the wind deg
+                    let windDeg = json["wind"]["deg"]; // Azymut
+                    arr.push(windDeg);
+                    // take the clouds
+                    let clouds = json["clouds"]["all"]; // Is this a percentage?
+                    arr.push(clouds);
 
-                console.log(arr);
+                    console.log(arr);
 
-                if(!vm.get('headerWasSet')){
-                    record = header;
-                    vm.set('headerWasSet', true);
+                    if(!vm.get('headerWasSet')){
+                        record = header;
+                        vm.set('headerWasSet', true);
+                    }
+
+                    record += arr.join(','); 
+                    startLog = vm.get('weatherLog');
+                    let newLog = startLog + record + '\n';
+                    vm.set('weatherLog', newLog);
+                    console.log('CsvAppend');
                 }
+            });
+            
+            xhr.addEventListener("error", function() {
+                alert("Niestety nie udało się nawiązać połączenia");
+            });
+            xhr.open("GET", 'https://api.openweathermap.org/data/2.5/weather?q='+vm.get('query')
+                +'&appid=435b757eb1a5a697cbb51992ce5d7962', true);
 
-                record += arr.join(','); 
-                startLog = vm.get('weatherLog');
-                let newLog = startLog + record + '\n';
-                vm.set('weatherLog', newLog);
-            }
-        });
-        
-        xhr.addEventListener("error", function() {
-            alert("Niestety nie udało się nawiązać połączenia");
-        });
-        xhr.open("GET", 'https://api.openweathermap.org/data/2.5/weather?q='+vm.get('query')
-            +'&appid=435b757eb1a5a697cbb51992ce5d7962', true);
-
-        xhr.send();
+            xhr.send();
+        }
     },
 
     downloadCsvLog: function() {
@@ -82,7 +86,8 @@ Ext.define('ExtWeather.view.main.MainController', {
         element.style.display = 'none';
         document.body.appendChild(element);
         element.click();
-        document.body.removeChild(element);        
+        document.body.removeChild(element); 
+        console.log('CsvDownload');       
     },
 
     onCurrentSelected: async function () { // => 23
