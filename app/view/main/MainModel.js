@@ -21,6 +21,8 @@ Ext.define('ExtWeather.view.main.MainModel', {
 
         headerWasSet: false,
 
+        voivodeshipCapitals: 'Warsaw,Poznań,Kraków,Łódź,Gdańsk,Rzeszów,Suwałki,Szczecin,Toruń',
+
         weatherLog: '',
 
         startInfo: 'Fill in the form or press Load Data below to see some info',
