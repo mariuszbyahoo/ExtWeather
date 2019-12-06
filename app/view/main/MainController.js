@@ -8,7 +8,6 @@ Ext.define('ExtWeather.view.main.MainController', {
 
     store: Ext.data.StoreManager.lookup('current'),
 
-    // No to teraz to dla Warszawy, Poznania, Krakowa, Łodzi, Wrocławia, Gdańska, Szczecina, Suwałk, Lublina, Rzeszowa, i Kielc.
     logCsv: async function() {
         const vm = this.getViewModel();
         let voivodeshipCapitalsArr = vm.get('voivodeshipCapitals').split(',');
@@ -18,7 +17,7 @@ Ext.define('ExtWeather.view.main.MainController', {
             voivodeshipsWeatherInfoGen(voivodeshipCapitalsArr[i]);
         }
         function voivodeshipsWeatherInfoGen(cityName) {
-            window.setInterval(logData, 6000); // 6s.
+            window.setInterval(logData, 900000); // 15min.
             async function logData() {
                 let header = '#city_name;timezone;current_timestamp;lon;lat;weather;tempC;humidity;visibility;wind_speed;wind_deg;clouds\n';
                 let record = '';
@@ -107,13 +106,13 @@ Ext.define('ExtWeather.view.main.MainController', {
         console.log('CsvDownload');       
     },
 
-    onCurrentSelected: async function () { // => 23
+    onCurrentSelected: async function () { 
             Ext.Msg.prompt('Weather', 
             'Type an english name of the city, which you are looking weather for:', 
             'onSubmitWeather', this);
     },
 
-    onForecastSelected: async function () { // => 39
+    onForecastSelected: async function () { 
             Ext.Msg.prompt('Forecast', 
             'Type an english name of the city, which you are looking forecast for:', 
             'onSubmitForecast', this); 
@@ -258,8 +257,7 @@ Ext.define('ExtWeather.view.main.MainController', {
                     
                         for(let i = 0 ; i < forecastsCount ; i++) {
                             let specificForecastDataStore = new ExtWeather.store.Forecast.SpecificForecast(); 
-                                //creating a new store because of the asynchronousness
-                                // Change the store's URL and get the data.
+
                             specificForecastDataStore.getProxy().getReader().setRootProperty('list['+ i +'].main');
                             vm.set('query', input);
                             specificForecastDataStore.getProxy().url = 'https://api.openweathermap.org/data/2.5/forecast?q=' +
@@ -274,8 +272,6 @@ Ext.define('ExtWeather.view.main.MainController', {
                                            titleAlign: 'center'
                                        });
                     
-                                       // Cannot set it nicely, (title first) because of that the status of store's call will be 
-                                       // unknown at the beginning, must be in specificForecastDataStore.load()'s callback
                                         if(i === 0){ // Setting the Main panel's title:
                                             let forecastCityStore = Ext.data.StoreManager.lookup('forecastCity');
                                             forecastCityStore.getProxy().url = specificForecastDataStore.getProxy().url;
@@ -312,7 +308,6 @@ Ext.define('ExtWeather.view.main.MainController', {
                                 }
                             });
                         };                        
-                        //await createPanels(input, vm, store); // => 194
                     } else {
                         Ext.Msg.alert('404', "City not found in the API... Try again!");
                     }
