@@ -250,8 +250,8 @@ Ext.define('ExtWeather.view.main.MainController', {
                 scope: this,
                 callback: async function(records, operation, success) {
                     if(success){
-                        let mainPanel = Ext.ComponentManager.get('forecastMainPanel'); 
-                        let forecastsCount = counterStore.count();
+                        let mainPanel = Ext.ComponentManager.get('forecastMainPanel');
+                        let forecastsCount = store.count();
                     
                         if(vm.get('areForecastsPopulated') == true) mainPanel.removeAll(true);
                     
@@ -298,7 +298,7 @@ Ext.define('ExtWeather.view.main.MainController', {
                     
                                         currentPanel.update(data); 
                     
-                                        currentPanel.setTitle(counterStore.collect('dt_txt')[i]);
+                                        currentPanel.setTitle(store.collect('dt_txt')[i]);
                                         mainPanel.insert(i, currentPanel); 
                                         mainPanel.updateLayout();
                                         vm.set('areForecastsPopulated', true);
